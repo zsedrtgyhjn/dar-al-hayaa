@@ -16,11 +16,21 @@ const NAV_ITEMS = [
   { label: 'Boutique', to: '/boutique' },
   {
     label: 'Femmes', to: '/femmes',
-    sub: ['Hijabs', 'Khimars', 'Abayas', 'Jilbabs', 'Robes pudiques', 'Voiles', 'Gants', 'Accessoires'],
+    sub: [
+      { label: 'Abayas', to: '/femmes/abayas' },
+      { label: 'Hijabs', to: '/femmes/hijabs' },
+      { label: 'Jilbabs', to: '/femmes/jilbabs' },
+      { label: 'Robes', to: '/femmes/robes' },
+      { label: 'Khimars', to: '/femmes/khimars' },
+      { label: 'Accessoires', to: '/femmes/accessoires' },
+    ],
   },
   {
     label: 'Hommes', to: '/hommes',
-    sub: ['Qamis', 'Sarouels', 'Ensembles', 'Bonnets', 'Keffieh', 'Sandales', 'Ceintures', 'Parfums'],
+    sub: [
+      { label: 'Qamis', to: '/hommes/qamis' },
+      { label: 'Sarouels', to: '/hommes/sarouels' },
+    ],
   },
   { label: 'Beauté', to: '/beaute' },
   { label: 'Électronique', to: '/electronique' },
@@ -135,11 +145,11 @@ export default function Header() {
                           <div className={s.megaMenuTitle}>{item.label}</div>
                           {item.sub.map((sub) => (
                             <Link
-                              key={sub}
-                              to={`${item.to}?cat=${encodeURIComponent(sub.toLowerCase())}`}
+                              key={sub.label}
+                              to={sub.to}
                               className={s.megaMenuLink}
                             >
-                              {sub}
+                              {sub.label}
                             </Link>
                           ))}
                         </motion.div>
@@ -195,7 +205,7 @@ export default function Header() {
                         <div>
                           <div>{p.name}</div>
                           <div style={{ fontSize: '0.75rem', color: 'var(--gold)' }}>
-                            {p.price.toFixed(2)} €
+                            {p.price.toLocaleString()} FCFA
                           </div>
                         </div>
                       </Link>
@@ -308,14 +318,30 @@ export default function Header() {
               </div>
 
               {NAV_ITEMS.map((item) => (
-                <NavLink
-                  key={item.label}
-                  to={item.to}
-                  className={s.mobileNavLink}
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {item.label}
-                </NavLink>
+                <div key={item.label}>
+                  <NavLink
+                    to={item.to}
+                    className={s.mobileNavLink}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    {item.label}
+                  </NavLink>
+                  {item.sub && (
+                    <div style={{ marginLeft: 16, marginTop: 8 }}>
+                      {item.sub.map((sub) => (
+                        <Link
+                          key={sub.label}
+                          to={sub.to}
+                          className={s.mobileNavLink}
+                          style={{ fontSize: '0.9rem', color: 'var(--gray-400)' }}
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {sub.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ))}
 
               <div style={{ marginTop: 24, paddingTop: 24, borderTop: '1px solid rgba(201,168,76,0.15)' }}>

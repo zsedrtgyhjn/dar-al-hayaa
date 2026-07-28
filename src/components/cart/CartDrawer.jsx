@@ -89,7 +89,7 @@ export default function CartDrawer() {
             {freeShippingLeft > 0 && items.length > 0 ? (
               <div className={styles.freeShipping}>
                 <Gift size={14} />
-                <span>Plus que <strong>{freeShippingLeft.toFixed(2)} €</strong> pour la livraison gratuite !</span>
+                <span>Plus que <strong>{freeShippingLeft.toLocaleString()} FCFA</strong> pour la livraison gratuite !</span>
               </div>
             ) : items.length > 0 ? (
               <div className={styles.freeShippingDone}>
@@ -162,7 +162,7 @@ export default function CartDrawer() {
                             </button>
                           </div>
                           <span className={styles.itemPrice}>
-                            {(item.price * item.quantity).toFixed(2)} €
+                            {(item.price * item.quantity).toLocaleString()} FCFA
                           </span>
                           <button
                             className={styles.deleteBtn}
@@ -212,23 +212,23 @@ export default function CartDrawer() {
                 <div className={styles.totals}>
                   <div className={styles.totalRow}>
                     <span>Sous-total</span>
-                    <span>{subtotal.toFixed(2)} €</span>
+                    <span>{subtotal.toLocaleString()} FCFA</span>
                   </div>
                   {discountAmt > 0 && (
                     <div className={`${styles.totalRow} ${styles.totalDiscount}`}>
                       <span>Réduction ({discount}%)</span>
-                      <span>-{discountAmt.toFixed(2)} €</span>
+                      <span>-{discountAmt.toLocaleString()} FCFA</span>
                     </div>
                   )}
                   <div className={styles.totalRow}>
                     <span>Livraison</span>
                     <span className={shipping === 0 ? styles.freeText : ''}>
-                      {shipping === 0 ? '🚚 Gratuite' : `${shipping.toFixed(2)} €`}
+                      {shipping === 0 ? '🚚 Gratuite' : `${shipping.toLocaleString()} FCFA`}
                     </span>
                   </div>
                   <div className={`${styles.totalRow} ${styles.totalFinal}`}>
                     <span>Total</span>
-                    <span>{total.toFixed(2)} €</span>
+                    <span>{total.toLocaleString()} FCFA</span>
                   </div>
                 </div>
 

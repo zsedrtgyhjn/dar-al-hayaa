@@ -125,6 +125,29 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Promotions Section */}
+      <section className={`${styles.featuredSection} section`}>
+        <div className="container">
+          <FadeInSection>
+            <div className="section-header">
+              <span className="section-tag" style={{ color: 'var(--error)' }}>🔥 Promotions</span>
+              <h2 className="section-title">Nos <span className="gold-text">Offres Spéciales</span></h2>
+              <div className="gold-line" />
+            </div>
+          </FadeInSection>
+          <div className={styles.productsGrid}>
+            {PRODUCTS.filter(p => p.discount > 0).slice(0, 4).map((p, i) => (
+              <ProductCard key={p.id} product={p} index={i} />
+            ))}
+          </div>
+          <div className={styles.viewAll}>
+            <Link to="/promotions" className={styles.viewAllBtn}>
+              Voir toutes les promotions <ArrowRight size={18} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Promo Banner */}
       <FadeInSection>
         <section className={styles.promoBanner}>

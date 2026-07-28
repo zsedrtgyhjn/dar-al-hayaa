@@ -19,12 +19,16 @@ import { LoginPage, RegisterPage } from './pages/Auth';
 import { AccountPage, WishlistPage } from './pages/Account';
 import { 
   ContactPage, FAQPage, AboutPage, 
-  PrivacyPage, TermsPage, OrderTrackingPage 
+  PrivacyPage, TermsPage, ShippingPage, OrderTrackingPage 
 } from './pages/Pages';
 import { 
   WomenPage, MenPage, BeautyPage, 
   ElectronicsPage, AccessoriesPage, 
-  PromotionsPage, NewArrivalsPage 
+  PromotionsPage, NewArrivalsPage,
+  AbayasPage, HijabsPage, JilbabsPage, RobesPage, KhimarsPage, AccessoiresFemmePage,
+  QamisPage, SarouelsPage,
+  CheveuxPage,
+  ChaussettesPage, GantsPage
 } from './pages/CategoryPages';
 
 // ScrollToTop component
@@ -87,6 +91,25 @@ export default function App() {
             <Route path="/accessoires" element={<AccessoriesPage />} />
             <Route path="/promotions" element={<PromotionsPage />} />
             <Route path="/nouveautes" element={<NewArrivalsPage />} />
+
+            {/* Subcategories - Femmes */}
+            <Route path="/femmes/abayas" element={<AbayasPage />} />
+            <Route path="/femmes/hijabs" element={<HijabsPage />} />
+            <Route path="/femmes/jilbabs" element={<JilbabsPage />} />
+            <Route path="/femmes/robes" element={<RobesPage />} />
+            <Route path="/femmes/khimars" element={<KhimarsPage />} />
+            <Route path="/femmes/accessoires" element={<AccessoiresFemmePage />} />
+
+            {/* Subcategories - Hommes */}
+            <Route path="/hommes/qamis" element={<QamisPage />} />
+            <Route path="/hommes/sarouels" element={<SarouelsPage />} />
+
+            {/* Subcategories - Beauté */}
+            <Route path="/beaute/cheveux" element={<CheveuxPage />} />
+
+            {/* Subcategories - Accessoires */}
+            <Route path="/accessoires/chaussettes" element={<ChaussettesPage />} />
+            <Route path="/accessoires/gants" element={<GantsPage />} />
             
             {/* Utility Pages */}
             <Route path="/contact" element={<ContactPage />} />
@@ -94,6 +117,9 @@ export default function App() {
             <Route path="/a-propos" element={<AboutPage />} />
             <Route path="/confidentialite" element={<PrivacyPage />} />
             <Route path="/cgv" element={<TermsPage />} />
+            <Route path="/mentions-legales" element={<TermsPage />} />
+            <Route path="/livraison" element={<ShippingPage />} />
+            <Route path="/retours" element={<ShippingPage />} />
             <Route path="/suivi-commande" element={<OrderTrackingPage />} />
             
             {/* Admin */}

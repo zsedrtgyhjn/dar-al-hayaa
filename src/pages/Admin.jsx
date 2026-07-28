@@ -209,7 +209,7 @@ export default function AdminDashboard() {
                             </span>
                           </div>
                         </div>
-                        <div className={styles.lowStockPrice}>{p.price.toFixed(2)} €</div>
+                        <div className={styles.lowStockPrice}>{p.price.toLocaleString()} FCFA</div>
                       </div>
                     ))}
                   </div>
@@ -247,7 +247,7 @@ export default function AdminDashboard() {
                           </div>
                         </td>
                         <td>{p.category}</td>
-                        <td className={styles.tableTotal}>{p.price.toFixed(2)} €</td>
+                        <td className={styles.tableTotal}>{p.price.toLocaleString()} FCFA</td>
                         <td>
                           <span style={{ color: p.stock <= 5 ? 'var(--error)' : 'var(--success)', fontWeight: 600 }}>
                             {p.stock}

@@ -1,9 +1,9 @@
 import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react';
 import { FAQ_ITEMS } from '../data/products';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './Pages.module.css';
 
 // ── Contact Page ──
@@ -164,7 +164,7 @@ export function AboutPage() {
               avec élégance, qualité et dans le respect de ses valeurs islamiques. 
             </p>
             <p>
-              Fondée en 2018, notre boutique propose une sélection rigoureuse de vêtements pudiques, 
+              Notre boutique propose une sélection rigoureuse de vêtements pudiques, 
               accessoires islamiques, parfums halal et équipements électroniques, le tout 
               dans un cadre de confiance et de qualité certifiée.
             </p>
@@ -205,13 +205,39 @@ export function PrivacyPage() {
       <div className="container-sm section">
         <div className={styles.legalContent}>
           <h2>1. Données collectées</h2>
-          <p>Nous collectons uniquement les données nécessaires : nom, email, adresse de livraison et historique de commandes.</p>
+          <p>Nous collectons uniquement les données nécessaires à votre commande : nom, prénom, adresse email, adresse de livraison, numéro de téléphone et informations de paiement. Ces données sont stockées de manière sécurisée dans notre base de données.</p>
+          
           <h2>2. Utilisation des données</h2>
-          <p>Vos données sont utilisées exclusivement pour le traitement de vos commandes et l'amélioration de nos services. Elles ne sont jamais vendues à des tiers.</p>
-          <h2>3. Vos droits</h2>
-          <p>Vous disposez d'un droit d'accès, de modification et de suppression de vos données. Contactez-nous à privacy@daralhayaa.com.</p>
-          <h2>4. Cookies</h2>
-          <p>Nous utilisons des cookies techniques essentiels au fonctionnement du site et, avec votre consentement, des cookies analytiques anonymisés.</p>
+          <p>Vos données personnelles sont utilisées exclusivement pour :</p>
+          <ul>
+            <li>Traiter et expédier vos commandes</li>
+            <li>Vous envoyer les confirmations de commande et mises à jour de livraison</li>
+            <li>Améliorer nos services et votre expérience utilisateur</li>
+            <li>Vous contacter si nécessaire concernant votre commande</li>
+          </ul>
+          <p><strong>Vos données ne sont jamais vendues à des tiers.</strong></p>
+          
+          <h2>3. Protection des données</h2>
+          <p>Nous utilisons des protocoles de sécurité avancés (SSL 256-bit) pour protéger vos données. Notre base de données est sécurisée et accessible uniquement par le personnel autorisé.</p>
+          
+          <h2>4. Vos droits</h2>
+          <p>Conformément au RGPD, vous disposez des droits suivants :</p>
+          <ul>
+            <li><strong>Droit d'accès :</strong> Consulter vos données personnelles</li>
+            <li><strong>Droit de rectification :</strong> Modifier vos données inexactes</li>
+            <li><strong>Droit à l'effacement :</strong> Demander la suppression de vos données</li>
+            <li><strong>Droit à la portabilité :</strong> Recevoir vos données dans un format structuré</li>
+          </ul>
+          <p>Pour exercer ces droits, contactez-nous à privacy@daralhayaa.com</p>
+          
+          <h2>5. Cookies</h2>
+          <p>Nous utilisons des cookies techniques essentiels au fonctionnement du site (panier, authentification). Avec votre consentement, nous utilisons également des cookies analytiques pour améliorer notre service.</p>
+          
+          <h2>6. Conservation des données</h2>
+          <p>Vos données sont conservées pendant la durée nécessaire au traitement de vos commandes et conformément aux obligations légales (5 ans pour les données comptables).</p>
+          
+          <h2>7. Contact</h2>
+          <p>Pour toute question concernant votre confidentialité : privacy@daralhayaa.com ou 05 03 74 43 36</p>
         </div>
       </div>
     </>
@@ -221,7 +247,7 @@ export function PrivacyPage() {
 export function TermsPage() {
   return (
     <>
-      <Helmet><title>Conditions Générales — Dar Al Hayaa</title></Helmet>
+      <Helmet><title>Conditions Générales de Vente — Dar Al Hayaa</title></Helmet>
       <div className={styles.pageHero}>
         <div className="container">
           <h1 className={styles.heroTitle}>Conditions Générales de Vente</h1>
@@ -230,15 +256,113 @@ export function TermsPage() {
       <div className="container-sm section">
         <div className={styles.legalContent}>
           <h2>1. Objet</h2>
-          <p>Les présentes CGV régissent les ventes effectuées sur Dar Al Hayaa.com entre la société Dar Al Hayaa SAS et tout acheteur.</p>
-          <h2>2. Commandes</h2>
-          <p>Toute commande vaut acceptation des présentes CGV. La commande est confirmée par email lors de la validation du paiement.</p>
-          <h2>3. Prix</h2>
-          <p>Les prix affichés sont en euros TTC. Dar Al Hayaa se réserve le droit de modifier ses prix à tout moment.</p>
-          <h2>4. Livraison</h2>
-          <p>Les délais de livraison sont de 3 à 5 jours ouvrables. La livraison est gratuite dès 80€ d'achat.</p>
-          <h2>5. Droit de rétractation</h2>
-          <p>Vous disposez de 30 jours pour retourner tout article non porté dans son emballage d'origine.</p>
+          <p>Les présentes Conditions Générales de Vente (CGV) régissent toutes les ventes de produits effectuées sur le site internet Dar Al Hayaa entre la société Dar Al Hayaa et tout acheteur.</p>
+          
+          <h2>2. Acceptation des conditions</h2>
+          <p>Le fait de passer commande sur notre site implique l'acceptation pleine et entière des présentes CGV. Ces conditions sont accessibles à tout moment sur le site et prévalent sur tout autre document.</p>
+          
+          <h2>3. Produits</h2>
+          <p>Les produits proposés à la vente sont décrits et présentés avec la plus grande précision possible. Cependant, si des erreurs ou omissions ont pu se produire, notre responsabilité ne pourra être engagée. Les photos sont contractuelles mais la couleur peut varier légèrement selon votre écran.</p>
+          
+          <h2>4. Commandes</h2>
+          <p>Toute commande validée par le client ne sera considérée comme définitive qu'après confirmation du paiement. Une confirmation de commande sera envoyée par email à l'adresse fournie par le client.</p>
+          
+          <h2>5. Prix</h2>
+          <p>Les prix sont indiqués en euros TTC (toutes taxes comprises). Dar Al Hayaa se réserve le droit de modifier ses prix à tout moment mais le produit sera facturé sur la base du tarif en vigueur au moment de la validation de la commande.</p>
+          
+          <h2>6. Paiement</h2>
+          <p>Le paiement est exigible immédiatement à la commande. Nous acceptons les moyens de paiement suivants :</p>
+          <ul>
+            <li>Orange Money</li>
+            <li>MTN Money</li>
+            <li>Wave</li>
+          </ul>
+          <p>Les transactions sont sécurisées via SSL. Dar Al Hayaa ne stocke jamais vos informations bancaires complètes.</p>
+          
+          <h2>7. Livraison</h2>
+          <p>Les produits sont livrés à l'adresse indiquée par le client lors de la commande. Les délais de livraison sont de 3 à 5 jours ouvrables pour la Côte d'Ivoire. La livraison est gratuite dès 80€ d'achat, sinon 5.99€.</p>
+          
+          <h2>8. Droit de rétractation</h2>
+          <p>Conformément à la législation en vigueur, vous disposez d'un délai de 30 jours à compter de la réception de votre commande pour exercer votre droit de rétractation sans avoir à justifier de motifs ni à payer de pénalités.</p>
+          
+          <h2>9. Retours et remboursements</h2>
+          <p>Les articles retournés doivent être neufs, non portés, dans leur emballage d'origine et accompagnés de tous les accessoires. Les frais de retour sont à la charge du client sauf si le produit est défectueux. Le remboursement sera effectué sous 5 à 7 jours ouvrables après réception et vérification du produit.</p>
+          
+          <h2>10. Garantie</h2>
+          <p>Tous nos produits bénéficient de la garantie légale de conformité et de la garantie contre les vices cachés. En cas de défaut, vous pouvez demander le remplacement ou le remboursement du produit.</p>
+          
+          <h2>11. Propriété intellectuelle</h2>
+          <p>Tous les éléments du site Dar Al Hayaa (textes, images, vidéos, logos) sont protégés par le droit d'auteur. Toute reproduction, même partielle, est interdite sans autorisation préalable.</p>
+          
+          <h2>12. Données personnelles</h2>
+          <p>Les informations collectées sont nécessaires au traitement de vos commandes et font l'objet d'un traitement conforme à notre Politique de Confidentialité.</p>
+          
+          <h2>13. Litiges</h2>
+          <p>En cas de litige, le client est invité à contacter le service client avant toute action contentieuse. Si aucun accord n'est trouvé, le litige sera soumis aux tribunaux compétents.</p>
+          
+          <h2>14. Contact</h2>
+          <p>Pour toute question relative aux CGV : contact@daralhayaa.com ou 05 03 74 43 36</p>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export function ShippingPage() {
+  return (
+    <>
+      <Helmet><title>Politique de Livraison — Dar Al Hayaa</title></Helmet>
+      <div className={styles.pageHero}>
+        <div className="container">
+          <h1 className={styles.heroTitle}>Politique de Livraison</h1>
+        </div>
+      </div>
+      <div className="container-sm section">
+        <div className={styles.legalContent}>
+          <h2>1. Zones de livraison</h2>
+          <p>Nous livrons dans toute la Côte d'Ivoire (Abidjan, Bouaké, Yamoussoukro, Korhogo, San-Pédro, etc.) et dans les pays limitrophes.</p>
+          
+          <h2>2. Délais de livraison</h2>
+          <ul>
+            <li><strong>Abidjan et environs :</strong> 2 à 3 jours ouvrables</li>
+            <li><strong>Intérieur de la Côte d'Ivoire :</strong> 3 à 5 jours ouvrables</li>
+            <li><strong>Pays limitrophes :</strong> 5 à 7 jours ouvrables</li>
+          </ul>
+          
+          <h2>3. Frais de livraison</h2>
+          <ul>
+            <li><strong>Gratuite</strong> dès 80€ d'achat en Côte d'Ivoire</li>
+            <li><strong>5.99€</strong> pour les commandes inférieures à 80€</li>
+            <li><strong>12.99€</strong> pour les livraisons internationales</li>
+          </ul>
+          
+          <h2>4. Modes de livraison</h2>
+          <p>Nous proposons plusieurs options de livraison :</p>
+          <ul>
+            <li><strong>Livraison à domicile :</strong> Notre livreur vous remet votre colis directement à votre adresse</li>
+            <li><strong>Point relais :</strong> Retrait dans l'un de nos points de relais partenaires</li>
+            <li><strong>Click & Collect :</strong> Retrait en magasin (disponible à Abidjan)</li>
+          </ul>
+          
+          <h2>5. Suivi de commande</h2>
+          <p>Vous recevrez un email de confirmation avec un numéro de suivi dès l'expédition de votre commande. Vous pouvez suivre l'avancement de votre livraison en temps réel sur la page "Suivi de commande" de notre site.</p>
+          
+          <h2>6. Réception de la commande</h2>
+          <p>À la réception de votre colis, nous vous recommandons de :</p>
+          <ul>
+            <li>Vérifier l'intégrité de l'emballage</li>
+            <li>Contrôler la conformité des produits</li>
+            <li>Signaler tout dommage immédiatement au livreur</li>
+          </ul>
+          
+          <h2>7. Absence lors de la livraison</h2>
+          <p>Si vous êtes absent lors de la livraison, le livrera laissera un avis de passage. Vous pourrez contacter le service client pour convenir d'une nouvelle livraison ou récupérer votre colis au point relais indiqué.</p>
+          
+          <h2>8. Retours et échanges</h2>
+          <p>En cas de produit non conforme ou défectueux, contactez-nous dans les 48h suivant la réception. Nous organiserons le retour et l'échange ou le remboursement selon vos préférences.</p>
+          
+          <h2>9. Contact</h2>
+          <p>Pour toute question relative à la livraison : contact@daralhayaa.com ou 05 03 74 43 36</p>
         </div>
       </div>
     </>
@@ -248,20 +372,36 @@ export function TermsPage() {
 export function OrderTrackingPage() {
   const [trackingId, setTrackingId] = useState('');
   const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const location = useLocation();
 
-  const handleTrack = (e) => {
+  // Pré-remplir si on vient du checkout
+  useEffect(() => {
+    if (location.state?.trackingId) {
+      setTrackingId(location.state.trackingId);
+    }
+  }, [location.state]);
+
+  const handleTrack = async (e) => {
     e.preventDefault();
-    setResult({
-      id: trackingId,
-      status: 'En transit',
-      steps: [
-        { label: 'Commande validée', done: true, date: '27 Jan 2025' },
-        { label: 'En préparation', done: true, date: '27 Jan 2025' },
-        { label: 'Expédié', done: true, date: '28 Jan 2025' },
-        { label: 'En transit', done: true, date: '28 Jan 2025' },
-        { label: 'Livré', done: false, date: 'Prévu 30 Jan 2025' },
-      ],
-    });
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const response = await fetch(`http://localhost:3001/api/orders/tracking/${trackingId}`);
+      const data = await response.json();
+      
+      if (response.ok) {
+        setResult(data);
+      } else {
+        setError(data.error || 'Commande non trouvée');
+      }
+    } catch (err) {
+      setError('Erreur de connexion au serveur');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -278,13 +418,28 @@ export function OrderTrackingPage() {
           <input
             type="text"
             className={styles.trackInput}
-            placeholder="Entrez votre numéro de commande (ex: #NF-001)"
+            placeholder="Entrez votre numéro de commande (ex: ORD-1234567890)"
             value={trackingId}
             onChange={(e) => setTrackingId(e.target.value)}
             required
           />
-          <button type="submit" className={styles.trackBtn}>Rechercher</button>
+          <button type="submit" className={styles.trackBtn} disabled={loading}>
+            {loading ? 'Recherche...' : 'Rechercher'}
+          </button>
         </form>
+
+        {error && (
+          <div style={{ 
+            background: '#fee', 
+            color: '#c33', 
+            padding: '16px', 
+            borderRadius: '8px', 
+            marginTop: '24px',
+            textAlign: 'center'
+          }}>
+            {error}
+          </div>
+        )}
 
         {result && (
           <motion.div
@@ -296,6 +451,11 @@ export function OrderTrackingPage() {
               <div>
                 <div className={styles.trackId}>Commande {result.id}</div>
                 <div className={styles.trackStatus}>📦 {result.status}</div>
+                {result.tracking_number && (
+                  <div style={{ fontSize: '0.875rem', color: 'var(--gray-500)', marginTop: '4px' }}>
+                    Numéro de suivi : {result.tracking_number}
+                  </div>
+                )}
               </div>
             </div>
             <div className={styles.trackSteps}>

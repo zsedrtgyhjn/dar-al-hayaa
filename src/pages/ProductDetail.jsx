@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import {
@@ -23,11 +23,38 @@ export default function ProductDetail() {
   const [qty, setQty] = useState(1);
   const [zoomed, setZoomed] = useState(false);
   const [zoomPos, setZoomPos] = useState({ x: 0, y: 0 });
+  const [reviews, setReviews] = useState([]);
+  const [newReview, setNewReview] = useState({ rating: 5, comment: '' });
 
   const addItem = useCartStore((s) => s.addItem);
   const openCart = useCartStore((s) => s.openCart);
   const toggleItem = useWishlistStore((s) => s.toggleItem);
   const isInWishlist = useWishlistStore((s) => s.isInWishlist);
+
+  // Charger les avis depuis la base de données
+  useEffect(() => {
+    const loadReviews = async () => {
+      try {
+        const response = await fetch(`http://localhost:3001/api/reviews/product/${id}`);
+        const data = await response.json();
+        if (data.length > 0) {
+          setReviews(data);
+        } else {
+          // Fallback aux avis mock si aucun avis dans la BD
+          const { REVIEWS } = await import('../data/products.js');
+          setReviews(REVIEWS.filter(r => r.product === product?.name));
+        }
+      } catch (error) {
+        // Fallback aux avis mock en cas d'erreur
+        const { REVIEWS } = await import('../data/products.js');
+        setReviews(REVIEWS.filter(r => r.product === product?.name));
+      }
+    };
+
+    if (product) {
+      loadReviews();
+    }
+  }, [id, product]);
 
   if (!product) {
     return (
@@ -43,6 +70,33 @@ export default function ProductDetail() {
   ).slice(0, 4);
 
   const inWish = isInWishlist(product.id);
+
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+    
+    try {
+      const response = await fetch('http://localhost:3001/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: 'guest', // À remplacer par l'ID utilisateur réel quand l'auth sera intégrée
+          product_id: id,
+          rating: newReview.rating,
+          comment: newReview.comment,
+          verified: false
+        })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setReviews([...reviews, data.review]);
+        setNewReview({ rating: 5, comment: '' });
+        toast.success('Avis ajouté avec succès !');
+      }
+    } catch (error) {
+      toast.error('Erreur lors de l\'ajout de l\'avis');
+    }
+  };
 
   const handleAddToCart = () => {
     if (product.sizes.length > 1 && !selectedSize) {
@@ -171,12 +225,12 @@ export default function ProductDetail() {
 
             {/* Price */}
             <div className={styles.priceBlock}>
-              <span className={styles.price}>{product.price.toFixed(2)} €</span>
+              <span className={styles.price}>{product.price.toLocaleString()} FCFA</span>
               {product.originalPrice && (
                 <>
-                  <span className={styles.originalPrice}>{product.originalPrice.toFixed(2)} €</span>
+                  <span className={styles.originalPrice}>{product.originalPrice.toLocaleString()} FCFA</span>
                   <span className={styles.savings}>
-                    Économisez {(product.originalPrice - product.price).toFixed(2)} €
+                    Économisez {(product.originalPrice - product.price).toLocaleString()} FCFA
                   </span>
                 </>
               )}

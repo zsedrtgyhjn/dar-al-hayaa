@@ -8,28 +8,108 @@ import toast from 'react-hot-toast';
 import styles from './Checkout.module.css';
 
 export default function CheckoutPage() {
-  const { items, getTotal, getSubtotal, getShipping, discount, getDiscount, clearCart } = useCartStore();
+  const { items, getTotal, getSubtotal, getShipping, discount, getDiscount, clearCart, couponCode } = useCartStore();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('orange');
+  const [orderData, setOrderData] = useState(null);
   const navigate = useNavigate();
 
   const total = getTotal();
 
   const handleNext = (e) => {
     e.preventDefault();
+    const formData = new FormData(e.target);
+    setOrderData({
+      firstName: formData.get('firstName'),
+      lastName: formData.get('lastName'),
+      email: formData.get('email'),
+      address: formData.get('address'),
+      postalCode: formData.get('postalCode'),
+      city: formData.get('city'),
+      phone: formData.get('phone')
+    });
     setStep(2);
   };
 
   const handlePayment = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // Simulation appel API paiement
-    await new Promise((r) => setTimeout(r, 1500));
-    setLoading(false);
-    setSuccess(true);
-    clearCart();
+    
+    try {
+      // Simuler le paiement mobile
+      const paymentResponse = await fetch('http://localhost:3001/api/payments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          order_id: 'pending',
+          method: paymentMethod,
+          amount: total,
+          status: 'completed',
+          transaction_id: `TXN-${Date.now()}`,
+          phone: orderData.phone
+        })
+      });
+
+      const paymentData = await paymentResponse.json();
+      
+      if (!paymentResponse.ok) {
+        throw new Error('Erreur lors du paiement');
+      }
+
+      // Créer la commande via l'API
+      const response = await fetch('http://localhost:3001/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: null, // Pour l'instant sans authentification
+          items: items,
+          total: total,
+          subtotal: getSubtotal(),
+          shipping: getShipping(),
+          discount: discount,
+          coupon_code: couponCode || null,
+          payment_method: paymentMethod,
+          shipping_address: orderData,
+          phone: orderData.phone,
+          email: orderData.email
+        })
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        // Mettre à jour le paiement avec l'ID de commande
+        await fetch(`http://localhost:3001/api/payments/${paymentData.payment.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ order_id: data.order_id })
+        });
+
+        setOrderData({ 
+          ...orderData, 
+          orderId: data.order_id, 
+          trackingNumber: data.tracking_number,
+          transactionId: paymentData.payment.transaction_id 
+        });
+        setLoading(false);
+        setSuccess(true);
+        clearCart();
+      } else {
+        throw new Error(data.error || 'Erreur lors de la commande');
+      }
+    } catch (error) {
+      setLoading(false);
+      console.error('Erreur:', error);
+      alert('Erreur lors de la commande: ' + error.message);
+    }
   };
 
   if (items.length === 0 && !success) {
@@ -47,10 +127,13 @@ export default function CheckoutPage() {
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className={styles.successCard}>
           <CheckCircle2 size={64} className={styles.successIcon} />
           <h1>Commande confirmée !</h1>
-          <p>Merci pour votre achat. Votre numéro de commande est <strong>#NF-{Math.floor(Math.random() * 10000)}</strong>.</p>
+          <p>Merci pour votre achat. Votre numéro de commande est <strong>{orderData?.orderId || 'N/A'}</strong>.</p>
+          {orderData?.trackingNumber && (
+            <p>Numéro de suivi : <strong>{orderData.trackingNumber}</strong></p>
+          )}
           <p>Un email de confirmation vous sera envoyé très bientôt.</p>
           <div className={styles.successActions}>
-            <Link to="/compte/commandes" className={styles.primaryBtn}>Voir ma commande</Link>
+            <Link to="/suivi-commande" state={{ trackingId: orderData?.trackingNumber || orderData?.orderId }} className={styles.primaryBtn}>Suivre ma commande</Link>
             <Link to="/" className={styles.secondaryBtn}>Retour à l'accueil</Link>
           </div>
         </motion.div>
@@ -85,38 +168,38 @@ export default function CheckoutPage() {
                   <div className={styles.formRow}>
                     <div className={styles.field}>
                       <label className={styles.label}>Prénom</label>
-                      <input type="text" className={styles.input} required />
+                      <input type="text" name="firstName" className={styles.input} required />
                     </div>
                     <div className={styles.field}>
                       <label className={styles.label}>Nom de famille</label>
-                      <input type="text" className={styles.input} required />
+                      <input type="text" name="lastName" className={styles.input} required />
                     </div>
                   </div>
                   
                   <div className={styles.field}>
                     <label className={styles.label}>Adresse mail</label>
-                    <input type="email" className={styles.input} required />
+                    <input type="email" name="email" className={styles.input} required />
                   </div>
                   
                   <div className={styles.field}>
                     <label className={styles.label}>Adresse</label>
-                    <input type="text" className={styles.input} placeholder="N° de rue, avenue..." required />
+                    <input type="text" name="address" className={styles.input} placeholder="N° de rue, avenue..." required />
                   </div>
                   
                   <div className={styles.formRow}>
                     <div className={styles.field}>
                       <label className={styles.label}>Code postal</label>
-                      <input type="text" className={styles.input} required />
+                      <input type="text" name="postalCode" className={styles.input} required />
                     </div>
                     <div className={styles.field}>
                       <label className={styles.label}>Ville</label>
-                      <input type="text" className={styles.input} required />
+                      <input type="text" name="city" className={styles.input} required />
                     </div>
                   </div>
                   
                   <div className={styles.field}>
                     <label className={styles.label}>Téléphone</label>
-                    <input type="tel" className={styles.input} required />
+                    <input type="tel" name="phone" className={styles.input} required />
                   </div>
                   
                   <button type="submit" className={styles.nextBtn}>
@@ -156,7 +239,7 @@ export default function CheckoutPage() {
                   </div>
                   
                   <button type="submit" className={styles.payBtn} disabled={loading}>
-                    {loading ? <div className={styles.spinner} /> : `Payer ${total.toFixed(2)} €`}
+                    {loading ? <div className={styles.spinner} /> : `Payer ${total.toLocaleString()} FCFA`}
                   </button>
                   <button type="button" className={styles.backBtn} onClick={() => setStep(1)}>
                     Retour à la livraison
@@ -179,7 +262,7 @@ export default function CheckoutPage() {
                         <span className={styles.itemTitle}>{item.name}</span>
                         <span className={styles.itemMeta}>{item.selectedSize || ''} {item.selectedColor ? `- ${item.selectedColor}` : ''}</span>
                       </div>
-                      <span className={styles.itemPrice}>{(item.price * item.quantity).toFixed(2)} €</span>
+                      <span className={styles.itemPrice}>{(item.price * item.quantity).toLocaleString()} FCFA</span>
                     </div>
                   ))}
                 </div>
@@ -187,21 +270,21 @@ export default function CheckoutPage() {
                 <div className={styles.totalsList}>
                   <div className={styles.totalRow}>
                     <span>Sous-total</span>
-                    <span>{getSubtotal().toFixed(2)} €</span>
+                    <span>{getSubtotal().toLocaleString()} FCFA</span>
                   </div>
                   {getDiscount() > 0 && (
                     <div className={`${styles.totalRow} ${styles.totalDiscount}`}>
                       <span>Réduction ({discount}%)</span>
-                      <span>-{getDiscount().toFixed(2)} €</span>
+                      <span>-{getDiscount().toLocaleString()} FCFA</span>
                     </div>
                   )}
                   <div className={styles.totalRow}>
                     <span>Expédition</span>
-                    <span>{getShipping() === 0 ? 'Gratuite' : `${getShipping().toFixed(2)} €`}</span>
+                    <span>{getShipping() === 0 ? 'Gratuite' : `${getShipping().toLocaleString()} FCFA`}</span>
                   </div>
                   <div className={`${styles.totalRow} ${styles.totalFinal}`}>
                     <span>Total à payer</span>
-                    <span className={styles.finalPrice}>{total.toFixed(2)} €</span>
+                    <span className={styles.finalPrice}>{total.toLocaleString()} FCFA</span>
                   </div>
                 </div>
               </div>

@@ -65,7 +65,7 @@ export default function ProductCard({ product, index = 0 }) {
             {product.isNew && <span className={`${styles.badge} ${styles.badgeNew}`}>Nouveau</span>}
             {product.isBestseller && <span className={`${styles.badge} ${styles.badgeBest}`}>⭐ Best-seller</span>}
             {product.discount > 0 && (
-              <span className={`${styles.badge} ${styles.badgeSale}`}>-{product.discount}%</span>
+              <span className={`${styles.badge} ${styles.badgeSale}`}>Promotion</span>
             )}
           </div>
 
@@ -144,9 +144,9 @@ export default function ProductCard({ product, index = 0 }) {
 
           {/* Price */}
           <div className={styles.priceRow}>
-            <span className={styles.price}>{product.price.toFixed(2)} €</span>
+            <span className={styles.price}>{product.price.toLocaleString()} FCFA</span>
             {product.originalPrice && (
-              <span className={styles.originalPrice}>{product.originalPrice.toFixed(2)} €</span>
+              <span className={styles.originalPrice}>{product.originalPrice.toLocaleString()} FCFA</span>
             )}
           </div>
         </div>

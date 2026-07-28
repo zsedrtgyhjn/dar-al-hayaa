@@ -24,11 +24,12 @@ const PRICE_RANGES = [
   { label: 'Plus de 100€', min: 100, max: Infinity },
 ];
 
-export default function Shop({ categoryFilter = null, title = 'Boutique' }) {
+export default function Shop({ categoryFilter = null, subcategoryFilter = null, title = 'Boutique' }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [sort, setSort] = useState('featured');
   const [priceRange, setPriceRange] = useState(0);
   const [selectedCats, setSelectedCats] = useState(categoryFilter ? [categoryFilter] : []);
+  const [selectedSubcats, setSelectedSubcats] = useState(subcategoryFilter ? [subcategoryFilter] : []);
   const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState('grid');
   const search = searchParams.get('search') || '';
@@ -39,6 +40,11 @@ export default function Shop({ categoryFilter = null, title = 'Boutique' }) {
     // Category filter
     if (selectedCats.length > 0) {
       result = result.filter((p) => selectedCats.includes(p.category));
+    }
+
+    // Subcategory filter
+    if (selectedSubcats.length > 0) {
+      result = result.filter((p) => selectedSubcats.includes(p.subcategory));
     }
 
     // Search filter
@@ -67,13 +73,31 @@ export default function Shop({ categoryFilter = null, title = 'Boutique' }) {
     }
 
     return result;
-  }, [selectedCats, sort, priceRange, search]);
+  }, [selectedCats, selectedSubcats, sort, priceRange, search]);
 
   const toggleCat = (catId) => {
     setSelectedCats((prev) =>
       prev.includes(catId) ? prev.filter((c) => c !== catId) : [...prev, catId]
     );
   };
+
+  const toggleSubcat = (subcatId) => {
+    setSelectedSubcats((prev) =>
+      prev.includes(subcatId) ? prev.filter((c) => c !== subcatId) : [...prev, subcatId]
+    );
+  };
+
+  // Get available subcategories based on selected categories
+  const availableSubcategories = useMemo(() => {
+    if (selectedCats.length === 0) return [];
+    const subcats = new Set();
+    PRODUCTS.forEach((p) => {
+      if (selectedCats.includes(p.category)) {
+        subcats.add(p.subcategory);
+      }
+    });
+    return Array.from(subcats);
+  }, [selectedCats]);
 
   return (
     <>
@@ -125,6 +149,25 @@ export default function Shop({ categoryFilter = null, title = 'Boutique' }) {
               ))}
             </div>
 
+            {/* Subcategories */}
+            {availableSubcategories.length > 0 && (
+              <div className={styles.filterGroup}>
+                <h4 className={styles.filterLabel}>Sous-catégories</h4>
+                {availableSubcategories.map((subcat) => (
+                  <label key={subcat} className={styles.filterCheck}>
+                    <input
+                      type="checkbox"
+                      checked={selectedSubcats.includes(subcat)}
+                      onChange={() => toggleSubcat(subcat)}
+                    />
+                    <span className={styles.filterCheckBox} />
+                    <span style={{ textTransform: 'capitalize' }}>{subcat}</span>
+                    <span className={styles.filterCount}>{PRODUCTS.filter((p) => p.subcategory === subcat).length}</span>
+                  </label>
+                ))}
+              </div>
+            )}
+
             {/* Price */}
             <div className={styles.filterGroup}>
               <h4 className={styles.filterLabel}>Prix</h4>
@@ -143,10 +186,10 @@ export default function Shop({ categoryFilter = null, title = 'Boutique' }) {
             </div>
 
             {/* Active filters reset */}
-            {(selectedCats.length > 0 || priceRange > 0) && (
+            {(selectedCats.length > 0 || selectedSubcats.length > 0 || priceRange > 0) && (
               <button
                 className={styles.resetFilters}
-                onClick={() => { setSelectedCats([]); setPriceRange(0); }}
+                onClick={() => { setSelectedCats([]); setSelectedSubcats([]); setPriceRange(0); }}
               >
                 <X size={14} /> Réinitialiser les filtres
               </button>
@@ -161,9 +204,9 @@ export default function Shop({ categoryFilter = null, title = 'Boutique' }) {
                 <button className={styles.filterToggle} onClick={() => setShowFilters(!showFilters)}>
                   <Filter size={16} />
                   Filtres
-                  {(selectedCats.length + (priceRange > 0 ? 1 : 0)) > 0 && (
+                  {(selectedCats.length + selectedSubcats.length + (priceRange > 0 ? 1 : 0)) > 0 && (
                     <span className={styles.filterBadge}>
-                      {selectedCats.length + (priceRange > 0 ? 1 : 0)}
+                      {selectedCats.length + selectedSubcats.length + (priceRange > 0 ? 1 : 0)}
                     </span>
                   )}
                 </button>
