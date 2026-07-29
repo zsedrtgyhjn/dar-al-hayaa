@@ -1,5 +1,20 @@
 {
-  "users": [],
+  "users": [
+    {
+      "id": "ADMIN-001",
+      "firstName": "Admin",
+      "lastName": "Dar Al-Hayaa",
+      "email": "admin@daralhayaa.com",
+      "phone": "+2250102030405",
+      "password": "$2b$10$f3o72/6.V4FwEPzA8Pcu9uPNoqzsOP8ly8juOx9xwL3ESPHmZ00Wy",
+      "role": "admin",
+      "isActive": true,
+      "emailVerified": true,
+      "createdAt": "2026-07-29T01:00:00.000Z",
+      "updatedAt": "2026-07-29T02:01:46.946Z",
+      "lastLoginAt": "2026-07-29T02:01:46.945Z"
+    }
+  ],
   "categories": [
     {
       "id": "femmes",
@@ -242,38 +257,6 @@
         "hijab",
         "foulard",
         "voile"
-      ]
-    },
-    {
-      "id": "f005",
-      "name": "Hijab Bohème en Soie",
-      "category": "femmes",
-      "subcategory": "hijab",
-      "price": 22900,
-      "originalPrice": 29500,
-      "discount": 22,
-      "rating": 4.8,
-      "reviews": 156,
-      "stock": 25,
-      "isNew": true,
-      "isBestseller": false,
-      "colors": [
-        "#C0B08A",
-        "#8B4B62",
-        "#1a1a1a"
-      ],
-      "sizes": [
-        "Unique"
-      ],
-      "images": [
-        "/images/femmes/hijab/#Affliate_1 pièce Foulard bohème en soie à motif….jpg"
-      ],
-      "description": "Foulard bohème en soie avec motifs élégants. Tissu luxueux et léger, parfait pour un look sophistiqué.",
-      "featured": true,
-      "tags": [
-        "hijab",
-        "foulard",
-        "soie"
       ]
     },
     {
@@ -721,39 +704,6 @@
       ]
     },
     {
-      "id": "f014",
-      "name": "Foulard Bohème en Soie",
-      "category": "femmes",
-      "subcategory": "acessoire",
-      "price": 19600,
-      "originalPrice": 26200,
-      "discount": 25,
-      "rating": 4.9,
-      "reviews": 145,
-      "stock": 20,
-      "isNew": true,
-      "isBestseller": true,
-      "colors": [
-        "#C9A84C",
-        "#1a1a1a",
-        "#8B4513"
-      ],
-      "sizes": [
-        "Taille Unique"
-      ],
-      "images": [
-        "/images/femmes/acessoire/Capture d'écran 2026-07-28 012019.png"
-      ],
-      "description": "Foulard bohème en soie avec motifs élégants. Accessoire polyvalent pour un look chic et décontracté. Tissu léger et confortable.",
-      "featured": true,
-      "tags": [
-        "foulard",
-        "soie",
-        "bohème",
-        "accessoire"
-      ]
-    },
-    {
       "id": "f015",
       "name": "Bonnet Satin Noir Élégant",
       "category": "femmes",
@@ -853,6 +803,574 @@
       ]
     },
     {
+      "id": "f023",
+      "name": "Chaussures Élégantes Beige",
+      "category": "femmes",
+      "subcategory": "chaussures",
+      "price": 32500,
+      "originalPrice": 39500,
+      "discount": 18,
+      "rating": 4.8,
+      "reviews": 145,
+      "stock": 20,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#F5F0E8",
+        "#D2B48C",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "40"
+      ],
+      "images": [
+        "/images/femmes/chaussures/21e48830-1b75-4d87-ac0a-579c050c6203.jpg"
+      ],
+      "description": "Chaussures élégantes beige confortables et stylées. Idéales pour un quotidien pudique et élégant.",
+      "featured": false,
+      "tags": [
+        "chaussures",
+        "beige",
+        "élégant"
+      ]
+    },
+    {
+      "id": "f024",
+      "name": "Chaussures Noires Classiques",
+      "category": "femmes",
+      "subcategory": "chaussures",
+      "price": 35500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.9,
+      "reviews": 178,
+      "stock": 25,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#1a1a1a",
+        "#2C3E50"
+      ],
+      "sizes": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "40"
+      ],
+      "images": [
+        "/images/femmes/chaussures/44256fcd-7f52-432d-8190-9dc3d859143d.jpg"
+      ],
+      "description": "Chaussures noires classiques intemporelles. Confort optimal pour toute la journée.",
+      "featured": true,
+      "tags": [
+        "chaussures",
+        "noir",
+        "classique"
+      ]
+    },
+    {
+      "id": "f025",
+      "name": "Chaussures Gris Moderne",
+      "category": "femmes",
+      "subcategory": "chaussures",
+      "price": 29500,
+      "originalPrice": 34500,
+      "discount": 15,
+      "rating": 4.7,
+      "reviews": 112,
+      "stock": 18,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#808080",
+        "#A9A9A9",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "40"
+      ],
+      "images": [
+        "/images/femmes/chaussures/4876cd67-5985-4aa8-8c9e-80259a36710c.jpg"
+      ],
+      "description": "Chaussures grises modernes avec design contemporain. Légères et confortables.",
+      "featured": false,
+      "tags": [
+        "chaussures",
+        "gris",
+        "moderne"
+      ]
+    },
+    {
+      "id": "f026",
+      "name": "Chaussures Bleu Marine",
+      "category": "femmes",
+      "subcategory": "chaussures",
+      "price": 31500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.8,
+      "reviews": 134,
+      "stock": 22,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#1A2E4A",
+        "#2C3E50",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "40"
+      ],
+      "images": [
+        "/images/femmes/chaussures/601a860a-7fdb-4c6a-9cc4-221cb87eb789.jpg"
+      ],
+      "description": "Chaussures bleu marine élégantes et confortables. Parfaites pour toutes les occasions.",
+      "featured": false,
+      "tags": [
+        "chaussures",
+        "bleu",
+        "marine"
+      ]
+    },
+    {
+      "id": "f027",
+      "name": "Chaussures Rose Pâle",
+      "category": "femmes",
+      "subcategory": "chaussures",
+      "price": 28500,
+      "originalPrice": 33500,
+      "discount": 15,
+      "rating": 4.6,
+      "reviews": 89,
+      "stock": 15,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#FFC0CB",
+        "#FF69B4",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "40"
+      ],
+      "images": [
+        "/images/femmes/chaussures/91ef0b3b-edbe-4b7f-a5b3-af72ed3cede8.jpg"
+      ],
+      "description": "Chaussures rose pâle délicates et féminines. Douces et confortables pour le quotidien.",
+      "featured": false,
+      "tags": [
+        "chaussures",
+        "rose",
+        "féminin"
+      ]
+    },
+    {
+      "id": "f028",
+      "name": "Chaussures Marron Élégant",
+      "category": "femmes",
+      "subcategory": "chaussures",
+      "price": 30500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.7,
+      "reviews": 98,
+      "stock": 20,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#8B4513",
+        "#D2B48C",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "40"
+      ],
+      "images": [
+        "/images/femmes/chaussures/bddc29fc-34c9-41bc-980a-e5378e1550b7.jpg"
+      ],
+      "description": "Chaussures marron élégantes en cuir de qualité. Style intemporel et confortable.",
+      "featured": false,
+      "tags": [
+        "chaussures",
+        "marron",
+        "cuir"
+      ]
+    },
+    {
+      "id": "f029",
+      "name": "Chaussures Blanc Pur",
+      "category": "femmes",
+      "subcategory": "chaussures",
+      "price": 27500,
+      "originalPrice": 32500,
+      "discount": 15,
+      "rating": 4.8,
+      "reviews": 156,
+      "stock": 25,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#FFFFFF",
+        "#F5F0E8",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "40"
+      ],
+      "images": [
+        "/images/femmes/chaussures/fe4bd074-4a9a-4834-80da-bb4e71fb0de0.jpg"
+      ],
+      "description": "Chaussures blanc pur éclatant et confortables. Faciles à entretenir et stylées.",
+      "featured": true,
+      "tags": [
+        "chaussures",
+        "blanc",
+        "pur"
+      ]
+    },
+    {
+      "id": "f030",
+      "name": "Chaussures Élégantes Beige Premium",
+      "category": "femmes",
+      "subcategory": "chaussures",
+      "price": 37500,
+      "originalPrice": 42500,
+      "discount": 12,
+      "rating": 4.7,
+      "reviews": 89,
+      "stock": 15,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#F5F0E8",
+        "#D2B48C"
+      ],
+      "sizes": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "40"
+      ],
+      "images": [
+        "/images/femmes/chaussures/4f1f8921-1b72-4354-affe-b2ef1bc137fe.jpg"
+      ],
+      "description": "Chaussures élégantes beige premium avec finition soignée. Confort optimal pour toute la journée.",
+      "featured": false,
+      "tags": [
+        "chaussures",
+        "beige",
+        "premium"
+      ]
+    },
+    {
+      "id": "f031",
+      "name": "Chaussures Noires Élégantes",
+      "category": "femmes",
+      "subcategory": "chaussures",
+      "price": 38500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.8,
+      "reviews": 112,
+      "stock": 18,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#1a1a1a",
+        "#2C3E50"
+      ],
+      "sizes": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "40"
+      ],
+      "images": [
+        "/images/femmes/chaussures/537cc703-b9bb-4a04-a4da-f4e5a6f466dc.jpg"
+      ],
+      "description": "Chaussures noires élégantes avec design moderne. Idéales pour occasions spéciales.",
+      "featured": true,
+      "tags": [
+        "chaussures",
+        "noir",
+        "élégant"
+      ]
+    },
+    {
+      "id": "f032",
+      "name": "Chaussures Grises Modernes",
+      "category": "femmes",
+      "subcategory": "chaussures",
+      "price": 34500,
+      "originalPrice": 39500,
+      "discount": 13,
+      "rating": 4.6,
+      "reviews": 67,
+      "stock": 22,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#808080",
+        "#A9A9A9"
+      ],
+      "sizes": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "40"
+      ],
+      "images": [
+        "/images/femmes/chaussures/5c1d8a14-f66a-4247-a181-2aa994d77950.jpg"
+      ],
+      "description": "Chaussures grises modernes et confortables. Style contemporain pour quotidien.",
+      "featured": false,
+      "tags": [
+        "chaussures",
+        "gris",
+        "moderne"
+      ]
+    },
+    {
+      "id": "f033",
+      "name": "Chaussures Bleu Marine Classiques",
+      "category": "femmes",
+      "subcategory": "chaussures",
+      "price": 36500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.7,
+      "reviews": 95,
+      "stock": 20,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#1E3A5F",
+        "#2C3E50"
+      ],
+      "sizes": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "40"
+      ],
+      "images": [
+        "/images/femmes/chaussures/5cad8d7b-e626-4e92-9128-58254bf5e600.jpg"
+      ],
+      "description": "Chaussures bleu marine classiques intemporelles. Confort et style garanti.",
+      "featured": false,
+      "tags": [
+        "chaussures",
+        "bleu marine",
+        "classique"
+      ]
+    },
+    {
+      "id": "f034",
+      "name": "Chaussures Rose Doux",
+      "category": "femmes",
+      "subcategory": "chaussures",
+      "price": 35500,
+      "originalPrice": 40500,
+      "discount": 12,
+      "rating": 4.8,
+      "reviews": 78,
+      "stock": 16,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#FFB6C1",
+        "#FFC0CB"
+      ],
+      "sizes": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "40"
+      ],
+      "images": [
+        "/images/femmes/chaussures/64a6c044-b4e4-4541-8e75-abca508f233f.jpg",
+        "/images/femmes/chaussures/e5ef9b04-c7ae-4ba8-ba36-d31230e731f4.jpg"
+      ],
+      "description": "Chaussures rose doux et féminines. Design élégant pour un look raffiné.",
+      "featured": false,
+      "tags": [
+        "chaussures",
+        "rose",
+        "doux"
+      ]
+    },
+    {
+      "id": "f035",
+      "name": "Chaussures Marron Chics",
+      "category": "femmes",
+      "subcategory": "chaussures",
+      "price": 37500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.9,
+      "reviews": 134,
+      "stock": 19,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#8B4513",
+        "#A0522D"
+      ],
+      "sizes": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "40"
+      ],
+      "images": [
+        "/images/femmes/chaussures/6d624f1f-1be7-4b96-98ee-86ad09014713.jpg",
+        "/images/femmes/chaussures/b6a2dd58-9322-4898-b320-ab32d53d3e08.jpg"
+      ],
+      "description": "Chaussures marron chics avec finition premium. Confort exceptionnel et style intemporel.",
+      "featured": true,
+      "tags": [
+        "chaussures",
+        "marron",
+        "chic"
+      ]
+    },
+    {
+      "id": "f036",
+      "name": "Chaussures Beige Clair",
+      "category": "femmes",
+      "subcategory": "chaussures",
+      "price": 33500,
+      "originalPrice": 37500,
+      "discount": 11,
+      "rating": 4.6,
+      "reviews": 56,
+      "stock": 24,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#F5F0E8",
+        "#FFF8DC"
+      ],
+      "sizes": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "40"
+      ],
+      "images": [
+        "/images/femmes/chaussures/b629f4e3-482a-4486-8191-85699ffeda1c.jpg"
+      ],
+      "description": "Chaussures beige clair légères et confortables. Idéales pour la journée.",
+      "featured": false,
+      "tags": [
+        "chaussures",
+        "beige",
+        "clair"
+      ]
+    },
+    {
+      "id": "f037",
+      "name": "Chaussures Gris Perle",
+      "category": "femmes",
+      "subcategory": "chaussures",
+      "price": 38500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.7,
+      "reviews": 71,
+      "stock": 17,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#D3D3D3",
+        "#C0C0C0"
+      ],
+      "sizes": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "40"
+      ],
+      "images": [
+        "/images/femmes/chaussures/c70b7310-d7ce-4396-a507-8b99c06f80cc.jpg"
+      ],
+      "description": "Chaussures gris perle élégantes et polyvalentes. S'adaptent à tous les styles.",
+      "featured": false,
+      "tags": [
+        "chaussures",
+        "gris",
+        "perle"
+      ]
+    },
+    {
+      "id": "f039",
+      "name": "Chaussures Noirs Mat",
+      "category": "femmes",
+      "subcategory": "chaussures",
+      "price": 39500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.9,
+      "reviews": 145,
+      "stock": 18,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#1a1a1a",
+        "#2C2C2C"
+      ],
+      "sizes": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "40"
+      ],
+      "images": [
+        "/images/femmes/chaussures/ece0c7ff-6d8e-4f34-b77b-bc78ccfa7064.jpg"
+      ],
+      "description": "Chaussures noirs mat avec design sophistiqué. Confort premium et style moderne.",
+      "featured": true,
+      "tags": [
+        "chaussures",
+        "noir",
+        "mat"
+      ]
+    },
+    {
       "id": "m001",
       "name": "Qamis Le Métronome Bleu Céleste",
       "category": "hommes",
@@ -895,7 +1413,7 @@
       "name": "Qamis Blanc Premium",
       "category": "hommes",
       "subcategory": "qamis",
-      "price": 69.99,
+      "price": 45800,
       "originalPrice": null,
       "discount": 0,
       "rating": 4.8,
@@ -1035,69 +1553,518 @@
       ]
     },
     {
-      "id": "a001",
-      "name": "Foulard Bohème en Soie",
-      "category": "accessoires",
-      "subcategory": "acessoire",
-      "price": 19600,
+      "id": "m006",
+      "name": "Chaussures Homme Noir Classique",
+      "category": "hommes",
+      "subcategory": "chaussures",
+      "price": 38500,
       "originalPrice": null,
       "discount": 0,
-      "rating": 4.8,
-      "reviews": 234,
-      "stock": 40,
-      "isNew": false,
+      "rating": 4.9,
+      "reviews": 198,
+      "stock": 25,
+      "isNew": true,
       "isBestseller": true,
       "colors": [
-        "#C0B08A",
-        "#8B4B62",
-        "#1a1a1a"
+        "#1a1a1a",
+        "#2C3E50"
       ],
       "sizes": [
-        "Unique"
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45"
       ],
       "images": [
-        "/images/femmes/acessoire/#Affliate_1 pièce Foulard bohème en soie à motif….jpg"
+        "/images/hommes/chaussures/0346c8a2-79fd-4774-95e2-b73f30348dbe.jpg"
       ],
-      "description": "Foulard bohème en soie avec motifs élégants. Accessoire parfait pour compléter votre tenue pudique.",
+      "description": "Chaussures homme noir classique intemporel. Confort optimal et style élégant pour toutes les occasions.",
       "featured": true,
       "tags": [
-        "foulard",
-        "soie",
-        "bohème"
+        "chaussures",
+        "homme",
+        "noir"
       ]
     },
     {
-      "id": "a002",
-      "name": "Chaussettes Gant Rayures",
-      "category": "accessoires",
-      "subcategory": "chaussettes",
-      "price": 9800,
-      "originalPrice": 13100,
-      "discount": 25,
-      "rating": 4.5,
-      "reviews": 189,
-      "stock": 60,
-      "isNew": false,
+      "id": "m007",
+      "name": "Chaussures Homme Marron Premium",
+      "category": "hommes",
+      "subcategory": "chaussures",
+      "price": 42500,
+      "originalPrice": 49500,
+      "discount": 14,
+      "rating": 4.8,
+      "reviews": 145,
+      "stock": 20,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#8B4513",
+        "#D2B48C",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45"
+      ],
+      "images": [
+        "/images/hommes/chaussures/19e26e77-dfc2-4325-af46-f23a48f52f10.jpg"
+      ],
+      "description": "Chaussures homme marron premium en cuir de qualité. Style raffiné et confortable.",
+      "featured": false,
+      "tags": [
+        "chaussures",
+        "homme",
+        "marron"
+      ]
+    },
+    {
+      "id": "m008",
+      "name": "Chaussures Homme Gris Moderne",
+      "category": "hommes",
+      "subcategory": "chaussures",
+      "price": 35500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.7,
+      "reviews": 112,
+      "stock": 22,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#808080",
+        "#A9A9A9",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45"
+      ],
+      "images": [
+        "/images/hommes/chaussures/20db1dbf-9cb9-4b4c-9a97-2c68333be8dd.jpg"
+      ],
+      "description": "Chaussures homme gris moderne avec design contemporain. Légères et confortables.",
+      "featured": false,
+      "tags": [
+        "chaussures",
+        "homme",
+        "gris"
+      ]
+    },
+    {
+      "id": "m009",
+      "name": "Chaussures Homme Bleu Marine",
+      "category": "hommes",
+      "subcategory": "chaussures",
+      "price": 37500,
+      "originalPrice": 42500,
+      "discount": 12,
+      "rating": 4.8,
+      "reviews": 134,
+      "stock": 18,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#1A2E4A",
+        "#2C3E50",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45"
+      ],
+      "images": [
+        "/images/hommes/chaussures/27e8f0a3-9098-4e98-8aec-5b6a47266b09.jpg"
+      ],
+      "description": "Chaussures homme bleu marine élégant et confortable. Parfait pour le travail et les occasions.",
+      "featured": false,
+      "tags": [
+        "chaussures",
+        "homme",
+        "bleu"
+      ]
+    },
+    {
+      "id": "m010",
+      "name": "Chaussures Homme Blanc Pur",
+      "category": "hommes",
+      "subcategory": "chaussures",
+      "price": 34500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.9,
+      "reviews": 167,
+      "stock": 25,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#FFFFFF",
+        "#F5F0E8",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45"
+      ],
+      "images": [
+        "/images/hommes/chaussures/3350e77e-bcda-4f4a-b974-815ada987193.jpg"
+      ],
+      "description": "Chaussures homme blanc pur éclatant. Faciles à entretenir et très confortables.",
+      "featured": true,
+      "tags": [
+        "chaussures",
+        "homme",
+        "blanc"
+      ]
+    },
+    {
+      "id": "m011",
+      "name": "Chaussures Homme Beige Élégant",
+      "category": "hommes",
+      "subcategory": "chaussures",
+      "price": 36500,
+      "originalPrice": 41500,
+      "discount": 12,
+      "rating": 4.7,
+      "reviews": 98,
+      "stock": 20,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#F5F0E8",
+        "#D2B48C",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45"
+      ],
+      "images": [
+        "/images/hommes/chaussures/35b93daf-1b31-46a8-ba82-13b150da9680.jpg"
+      ],
+      "description": "Chaussures homme beige élégant et confortable. Idéal pour un style décontracté chic.",
+      "featured": false,
+      "tags": [
+        "chaussures",
+        "homme",
+        "beige"
+      ]
+    },
+    {
+      "id": "m012",
+      "name": "Chaussures Homme Noir Sport",
+      "category": "hommes",
+      "subcategory": "chaussures",
+      "price": 32500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.6,
+      "reviews": 89,
+      "stock": 15,
+      "isNew": true,
       "isBestseller": false,
       "colors": [
         "#1a1a1a",
-        "#2C3E50",
-        "#4A4A4A"
+        "#2C3E50"
       ],
       "sizes": [
-        "36-40",
-        "41-45",
-        "46-50"
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45"
       ],
       "images": [
-        "/images/accessoires/chaussettes/GANT - Lot de 4 paires de chaussettes à rayures et motif losanges - Gris.jpg"
+        "/images/hommes/chaussures/593b2dfe-d0f5-4225-ac0c-9ac040a71ccc.jpg"
       ],
-      "description": "Lot de 4 paires de chaussettes à rayures et motif losanges. Coton de qualité, confortables au quotidien.",
+      "description": "Chaussures homme noir sport légères et confortables. Parfaites pour le quotidien.",
       "featured": false,
       "tags": [
-        "chaussettes",
+        "chaussures",
         "homme",
-        "confort"
+        "sport"
+      ]
+    },
+    {
+      "id": "m013",
+      "name": "Chaussures Homme Cuir Premium",
+      "category": "hommes",
+      "subcategory": "chaussures",
+      "price": 45500,
+      "originalPrice": 52500,
+      "discount": 13,
+      "rating": 4.9,
+      "reviews": 178,
+      "stock": 18,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#8B4513",
+        "#1a1a1a",
+        "#2C3E50"
+      ],
+      "sizes": [
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45"
+      ],
+      "images": [
+        "/images/hommes/chaussures/67d3427f-f665-4e78-822f-ce18c89d7c86.jpg"
+      ],
+      "description": "Chaussures homme cuir premium de haute qualité. Style luxueux et confort exceptionnel.",
+      "featured": true,
+      "tags": [
+        "chaussures",
+        "homme",
+        "cuir"
+      ]
+    },
+    {
+      "id": "m014",
+      "name": "Chaussures Homme Gris Foncé",
+      "category": "hommes",
+      "subcategory": "chaussures",
+      "price": 33500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.7,
+      "reviews": 112,
+      "stock": 22,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#4A4A4A",
+        "#2C3E50",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45"
+      ],
+      "images": [
+        "/images/hommes/chaussures/7b3bc273-9ea9-4648-8e2f-6d1854cdb3d2.jpg"
+      ],
+      "description": "Chaussures homme gris foncé élégant et polyvalent. Convient à toutes les occasions.",
+      "featured": false,
+      "tags": [
+        "chaussures",
+        "homme",
+        "gris"
+      ]
+    },
+    {
+      "id": "m015",
+      "name": "Chaussures Homme Bleu Ciel",
+      "category": "hommes",
+      "subcategory": "chaussures",
+      "price": 34500,
+      "originalPrice": 39500,
+      "discount": 13,
+      "rating": 4.8,
+      "reviews": 134,
+      "stock": 20,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#87CEEB",
+        "#1A2E4A",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45"
+      ],
+      "images": [
+        "/images/hommes/chaussures/93df3333-4daf-4157-b451-08ba411f3135.jpg"
+      ],
+      "description": "Chaussures homme bleu ciel frais et moderne. Style décontracté et confortable.",
+      "featured": false,
+      "tags": [
+        "chaussures",
+        "homme",
+        "bleu"
+      ]
+    },
+    {
+      "id": "m016",
+      "name": "Chaussures Homme Marron Clair",
+      "category": "hommes",
+      "subcategory": "chaussures",
+      "price": 35500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.7,
+      "reviews": 98,
+      "stock": 18,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#D2B48C",
+        "#F5F0E8",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45"
+      ],
+      "images": [
+        "/images/hommes/chaussures/96850a85-6e75-40d3-b746-33ed45a620c2.jpg"
+      ],
+      "description": "Chaussures homme marron clair doux et confortable. Idéal pour le quotidien.",
+      "featured": false,
+      "tags": [
+        "chaussures",
+        "homme",
+        "marron"
+      ]
+    },
+    {
+      "id": "m017",
+      "name": "Chaussures Homme Noir Mat",
+      "category": "hommes",
+      "subcategory": "chaussures",
+      "price": 37500,
+      "originalPrice": 42500,
+      "discount": 12,
+      "rating": 4.8,
+      "reviews": 145,
+      "stock": 22,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#1a1a1a",
+        "#2C3E50"
+      ],
+      "sizes": [
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45"
+      ],
+      "images": [
+        "/images/hommes/chaussures/a3d9764e-ef66-49fd-aeea-2844a4191d6a.jpg"
+      ],
+      "description": "Chaussures homme noir mat élégant et moderne. Finition premium et confort optimal.",
+      "featured": false,
+      "tags": [
+        "chaussures",
+        "homme",
+        "noir"
+      ]
+    },
+    {
+      "id": "m018",
+      "name": "Chaussures Homme Gris Argent",
+      "category": "hommes",
+      "subcategory": "chaussures",
+      "price": 38500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.9,
+      "reviews": 167,
+      "stock": 25,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#C0C0C0",
+        "#A9A9A9",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45"
+      ],
+      "images": [
+        "/images/hommes/chaussures/b56a679b-9429-4f28-a4fe-2c7b62661b4d.jpg"
+      ],
+      "description": "Chaussures homme gris argent brillant et stylé. Design moderne et confortable.",
+      "featured": true,
+      "tags": [
+        "chaussures",
+        "homme",
+        "gris"
+      ]
+    },
+    {
+      "id": "m019",
+      "name": "Chaussures Homme Beige Sable",
+      "category": "hommes",
+      "subcategory": "chaussures",
+      "price": 33500,
+      "originalPrice": 38500,
+      "discount": 13,
+      "rating": 4.7,
+      "reviews": 112,
+      "stock": 20,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#F5F0E8",
+        "#E6D5B8",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45"
+      ],
+      "images": [
+        "/images/hommes/chaussures/c704b0d9-3872-445f-9c7e-9e2e923ce0cf.jpg"
+      ],
+      "description": "Chaussures homme beige sable naturel et confortable. Style décontracté élégant.",
+      "featured": false,
+      "tags": [
+        "chaussures",
+        "homme",
+        "beige"
       ]
     },
     {
@@ -1165,6 +2132,132 @@
     },
     {
       "id": "a005",
+      "name": "Tapis de Prière Premium",
+      "category": "accessoires",
+      "subcategory": "islam",
+      "price": 28500,
+      "originalPrice": 33500,
+      "discount": 15,
+      "rating": 4.9,
+      "reviews": 312,
+      "stock": 35,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#1a1a1a",
+        "#C9A84C",
+        "#8B4513"
+      ],
+      "sizes": [
+        "Standard"
+      ],
+      "images": [
+        "/images/accessoires/islam/03319965-7679-4934-a4fb-d5ddca4a29f9.jpg"
+      ],
+      "description": "Tapis de prière premium en matériaux de qualité. Confort optimal pour vos prières quotidiennes.",
+      "featured": true,
+      "tags": [
+        "tapis",
+        "prière",
+        "islam"
+      ]
+    },
+    {
+      "id": "a006",
+      "name": "Coran de Luxe",
+      "category": "accessoires",
+      "subcategory": "islam",
+      "price": 48500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.9,
+      "reviews": 267,
+      "stock": 25,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#C9A84C",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "Standard"
+      ],
+      "images": [
+        "/images/accessoires/islam/3316f26b-42ba-480c-b55a-1cda3c761ee6.jpg"
+      ],
+      "description": "Coran de luxe avec reliure dorée. Édition premium pour lecture et méditation.",
+      "featured": true,
+      "tags": [
+        "coran",
+        "luxe",
+        "islam"
+      ]
+    },
+    {
+      "id": "a007",
+      "name": "Chapelet Islamique Premium",
+      "category": "accessoires",
+      "subcategory": "islam",
+      "price": 18500,
+      "originalPrice": 22500,
+      "discount": 18,
+      "rating": 4.8,
+      "reviews": 189,
+      "stock": 45,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#C9A84C",
+        "#8B4513",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "Standard"
+      ],
+      "images": [
+        "/images/accessoires/islam/bc4c8e4f-4dfa-46ee-9ea8-18fe25be14a5.jpg"
+      ],
+      "description": "Chapelet islamique premium en perles naturelles. Pour dhikr et méditation.",
+      "featured": false,
+      "tags": [
+        "chapelet",
+        "islam",
+        "dhikr"
+      ]
+    },
+    {
+      "id": "a008",
+      "name": "Boussole Qibla Électronique",
+      "category": "accessoires",
+      "subcategory": "islam",
+      "price": 24500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.7,
+      "reviews": 156,
+      "stock": 30,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#1a1a1a",
+        "#C0C0C0"
+      ],
+      "sizes": [
+        "Standard"
+      ],
+      "images": [
+        "/images/accessoires/islam/eac7a89b-573d-4ca2-ad3c-0fa79ba3be40.jpg"
+      ],
+      "description": "Boussole Qibla électronique précise. Trouvez facilement la direction de La Mecque.",
+      "featured": false,
+      "tags": [
+        "boussole",
+        "qibla",
+        "islam"
+      ]
+    },
+    {
+      "id": "a009",
       "name": "Bonnet Satin Rose Pâle",
       "category": "accessoires",
       "subcategory": "acessoire",
@@ -1194,39 +2287,6 @@
         "satin",
         "cheveux",
         "sommeil"
-      ]
-    },
-    {
-      "id": "a006",
-      "name": "Foulard Bohème en Soie",
-      "category": "accessoires",
-      "subcategory": "acessoire",
-      "price": 19600,
-      "originalPrice": 26200,
-      "discount": 25,
-      "rating": 4.9,
-      "reviews": 145,
-      "stock": 20,
-      "isNew": true,
-      "isBestseller": true,
-      "colors": [
-        "#C9A84C",
-        "#1a1a1a",
-        "#8B4513"
-      ],
-      "sizes": [
-        "Taille Unique"
-      ],
-      "images": [
-        "/images/femmes/acessoire/Capture d'écran 2026-07-28 012019.png"
-      ],
-      "description": "Foulard bohème en soie avec motifs élégants. Accessoire polyvalent pour un look chic et décontracté. Tissu léger et confortable.",
-      "featured": true,
-      "tags": [
-        "foulard",
-        "soie",
-        "bohème",
-        "accessoire"
       ]
     },
     {
@@ -1329,36 +2389,383 @@
       ]
     },
     {
-      "id": "b001",
-      "name": "Chouchou Soie de Mûrier",
-      "category": "beaute",
-      "subcategory": "cheveux",
-      "price": 22900,
-      "originalPrice": null,
-      "discount": 0,
-      "rating": 4.9,
-      "reviews": 423,
-      "stock": 67,
-      "isNew": false,
+      "id": "e001",
+      "name": "Bouilloire Électrique Premium",
+      "category": "electronique",
+      "subcategory": "cuisine",
+      "price": 45500,
+      "originalPrice": 52500,
+      "discount": 13,
+      "rating": 4.8,
+      "reviews": 234,
+      "stock": 30,
+      "isNew": true,
       "isBestseller": true,
       "colors": [
-        "#FFFFFF",
-        "#F5F0E8",
         "#1a1a1a",
-        "#8B4B62"
+        "#C0C0C0",
+        "#FFFFFF"
       ],
       "sizes": [
-        "Standard"
+        "Unique"
       ],
       "images": [
-        "/images/beaute/Chouchou 100 % soie de mûrier de qualité supérieure - taille standard _ demoiselle d'honneur _ anniversaire _ professeur _ personnalisé _ cadeau _ cadeau pour elle _ cheveux sains.jpg"
+        "/images/electronique/5d42657b-f1b4-4d2e-bc45-5056cc533856.jpg"
       ],
-      "description": "Chouchou 100% soie de mûrier de qualité supérieure. Protège vos cheveux pendant le sommeil, idéal pour tous les types de cheveux.",
+      "description": "Bouilloire électrique premium avec thermostat réglable. Design moderne et chauffage rapide pour votre cuisine.",
       "featured": true,
       "tags": [
-        "chouchou",
-        "soie",
-        "cheveux"
+        "bouilloire",
+        "électrique",
+        "cuisine"
+      ]
+    },
+    {
+      "id": "e003",
+      "name": "Bouilloire Compacte Rapide",
+      "category": "electronique",
+      "subcategory": "cuisine",
+      "price": 28500,
+      "originalPrice": 34500,
+      "discount": 17,
+      "rating": 4.7,
+      "reviews": 178,
+      "stock": 40,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#FFFFFF",
+        "#C0C0C0"
+      ],
+      "sizes": [
+        "Unique"
+      ],
+      "images": [
+        "/images/electronique/cc909ab4-e179-4f66-be7e-b07320a047ad.jpg"
+      ],
+      "description": "Bouilloire compacte rapide avec arrêt automatique. Parfaite pour les petits espaces et usage quotidien.",
+      "featured": false,
+      "tags": [
+        "bouilloire",
+        "électrique",
+        "compact"
+      ]
+    },
+    {
+      "id": "e004",
+      "name": "Mixeur Portable Puissant",
+      "category": "electronique",
+      "subcategory": "cuisine",
+      "price": 32500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.8,
+      "reviews": 245,
+      "stock": 35,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#1a1a1a",
+        "#FFFFFF",
+        "#C9A84C"
+      ],
+      "sizes": [
+        "Unique"
+      ],
+      "images": [
+        "/images/electronique/e4af0e8e-fe8c-418d-b2cc-b0023e275ea7.jpg"
+      ],
+      "description": "Mixeur portable puissant avec batterie rechargeable. Parfait pour smoothies et boissons en déplacement.",
+      "featured": true,
+      "tags": [
+        "mixeur",
+        "portable",
+        "blender"
+      ]
+    },
+    {
+      "id": "e005",
+      "name": "Écouteurs Bluetooth Premium",
+      "category": "electronique",
+      "subcategory": "audio",
+      "price": 48500,
+      "originalPrice": 55500,
+      "discount": 13,
+      "rating": 4.8,
+      "reviews": 234,
+      "stock": 30,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#1a1a1a",
+        "#FFFFFF",
+        "#2C3E50"
+      ],
+      "sizes": [
+        "Unique"
+      ],
+      "images": [
+        "/images/electronique/audio/010052d5-df5e-4227-9e60-dd9650a93e3c.jpg"
+      ],
+      "description": "Écouteurs Bluetooth premium avec réduction de bruit. Son haute fidélité et autonomie prolongée.",
+      "featured": true,
+      "tags": [
+        "écouteurs",
+        "bluetooth",
+        "audio"
+      ]
+    },
+    {
+      "id": "e006",
+      "name": "Casque Audio Sans Fil",
+      "category": "electronique",
+      "subcategory": "audio",
+      "price": 52500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.7,
+      "reviews": 189,
+      "stock": 25,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#1a1a1a",
+        "#C0C0C0"
+      ],
+      "sizes": [
+        "Unique"
+      ],
+      "images": [
+        "/images/electronique/audio/0ea8133c-2463-4c69-bdcd-544ac030a89f.jpg"
+      ],
+      "description": "Casque audio sans fil avec confort optimal. Son surround et isolation acoustique.",
+      "featured": false,
+      "tags": [
+        "casque",
+        "audio",
+        "sans fil"
+      ]
+    },
+    {
+      "id": "e007",
+      "name": "Écouteurs Intra-auriculaires",
+      "category": "electronique",
+      "subcategory": "audio",
+      "price": 42500,
+      "originalPrice": 48500,
+      "discount": 12,
+      "rating": 4.6,
+      "reviews": 156,
+      "stock": 35,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#FFFFFF",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "Unique"
+      ],
+      "images": [
+        "/images/electronique/audio/34d7d150-675c-41a8-8bde-fbd47c300e4a.jpg"
+      ],
+      "description": "Écouteurs intra-auriculaires légers et confortables. Qualité sonore exceptionnelle.",
+      "featured": false,
+      "tags": [
+        "écouteurs",
+        "intra",
+        "audio"
+      ]
+    },
+    {
+      "id": "e008",
+      "name": "Casque Sport Étanche",
+      "category": "electronique",
+      "subcategory": "audio",
+      "price": 46500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.8,
+      "reviews": 201,
+      "stock": 28,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#1a1a1a",
+        "#FF4500",
+        "#32CD32"
+      ],
+      "sizes": [
+        "Unique"
+      ],
+      "images": [
+        "/images/electronique/audio/6ad11711-1bc8-42e9-976e-b38d0d1a6a82.jpg"
+      ],
+      "description": "Casque sport étanche avec fixation stable. Parfait pour running et fitness.",
+      "featured": true,
+      "tags": [
+        "casque",
+        "sport",
+        "étanche"
+      ]
+    },
+    {
+      "id": "e009",
+      "name": "Écouteurs Bluetooth Mini",
+      "category": "electronique",
+      "subcategory": "audio",
+      "price": 38500,
+      "originalPrice": 43500,
+      "discount": 11,
+      "rating": 4.7,
+      "reviews": 178,
+      "stock": 40,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#FFFFFF",
+        "#1a1a1a",
+        "#C9A84C"
+      ],
+      "sizes": [
+        "Unique"
+      ],
+      "images": [
+        "/images/electronique/audio/b4c4785f-9fc7-4a6a-b8d8-6da1562a6565.jpg"
+      ],
+      "description": "Écouteurs Bluetooth mini compacts et puissants. Design ergonomique et son clair.",
+      "featured": false,
+      "tags": [
+        "écouteurs",
+        "bluetooth",
+        "mini"
+      ]
+    },
+    {
+      "id": "e010",
+      "name": "Montre Connectée Intelligente",
+      "category": "electronique",
+      "subcategory": "montres",
+      "price": 68500,
+      "originalPrice": 75500,
+      "discount": 9,
+      "rating": 4.9,
+      "reviews": 312,
+      "stock": 25,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#1a1a1a",
+        "#C9A84C",
+        "#FFFFFF"
+      ],
+      "sizes": [
+        "Unique"
+      ],
+      "images": [
+        "/images/electronique/montres/14bb0fe0-924f-422c-8581-cf9edeb6fe30.jpg"
+      ],
+      "description": "Montre connectée intelligente avec suivi fitness et notifications. Écran tactile et étanche.",
+      "featured": true,
+      "tags": [
+        "montre",
+        "connectée",
+        "smartwatch"
+      ]
+    },
+    {
+      "id": "e011",
+      "name": "Montre Sport GPS",
+      "category": "electronique",
+      "subcategory": "montres",
+      "price": 58500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.8,
+      "reviews": 245,
+      "stock": 30,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#1a1a1a",
+        "#FFFFFF"
+      ],
+      "sizes": [
+        "Unique"
+      ],
+      "images": [
+        "/images/electronique/montres/1caa7b88-31c0-4e55-8488-5c5d199803bd.jpg"
+      ],
+      "description": "Montre sport GPS avec suivi d'activité précis. Résistante à l'eau et légère.",
+      "featured": false,
+      "tags": [
+        "montre",
+        "sport",
+        "gps"
+      ]
+    },
+    {
+      "id": "e012",
+      "name": "Montre Classique Élégante",
+      "category": "electronique",
+      "subcategory": "montres",
+      "price": 72500,
+      "originalPrice": 79500,
+      "discount": 9,
+      "rating": 4.9,
+      "reviews": 289,
+      "stock": 20,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#C9A84C",
+        "#1a1a1a",
+        "#C0C0C0"
+      ],
+      "sizes": [
+        "Unique"
+      ],
+      "images": [
+        "/images/electronique/montres/3399e931-90a9-45a4-a625-a12777521a44.jpg"
+      ],
+      "description": "Montre classique élégante avec bracelet premium. Style intemporel et précision suisse.",
+      "featured": true,
+      "tags": [
+        "montre",
+        "classique",
+        "élégant"
+      ]
+    },
+    {
+      "id": "e013",
+      "name": "Montre Connectée Mode",
+      "category": "electronique",
+      "subcategory": "montres",
+      "price": 63500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.7,
+      "reviews": 198,
+      "stock": 22,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#C9A84C",
+        "#8B4513",
+        "#FFFFFF"
+      ],
+      "sizes": [
+        "Unique"
+      ],
+      "images": [
+        "/images/electronique/montres/e877e2b4-3a58-45bd-aff6-b7059b650b9f.jpg"
+      ],
+      "description": "Montre connectée mode avec design raffiné. Notifications et suivi santé intégrés.",
+      "featured": false,
+      "tags": [
+        "montre",
+        "connectée",
+        "mode"
       ]
     },
     {
@@ -1424,6 +2831,421 @@
         "bonnet",
         "satin",
         "soins"
+      ]
+    },
+    {
+      "id": "b017",
+      "name": "Bonnet Wake Up With Better Hair",
+      "category": "beaute",
+      "subcategory": "cheveux",
+      "price": 17500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.8,
+      "reviews": 145,
+      "stock": 42,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#FFFFFF",
+        "#F5F0E8",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "Standard"
+      ],
+      "images": [
+        "/images/beaute/Wake Up With Better Hair 🕊️☁️.jpg"
+      ],
+      "description": "Bonnet satin Wake Up With Better Hair pour cheveux sains et brillants. Protection nocturne premium.",
+      "featured": true,
+      "tags": [
+        "bonnet",
+        "satin",
+        "cheveux"
+      ]
+    },
+    {
+      "id": "b004",
+      "name": "Kit Soin Visage Complet",
+      "category": "beaute",
+      "subcategory": "soin_visage",
+      "price": 45500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.9,
+      "reviews": 234,
+      "stock": 30,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#C9A84C",
+        "#1a1a1a",
+        "#FFFFFF"
+      ],
+      "sizes": [
+        "Standard"
+      ],
+      "images": [
+        "/images/beaute/8d225890-b0b9-4daf-83c5-4d3950aba3a9.jpg"
+      ],
+      "description": "Kit soin visage complet avec crème, sérum et masque. Traitement professionnel pour peau éclatante.",
+      "featured": true,
+      "tags": [
+        "kit",
+        "soin",
+        "visage"
+      ]
+    },
+    {
+      "id": "b005",
+      "name": "Parfum Musc Premium",
+      "category": "beaute",
+      "subcategory": "parfums",
+      "price": 48500,
+      "originalPrice": 55500,
+      "discount": 13,
+      "rating": 4.8,
+      "reviews": 234,
+      "stock": 30,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#1a1a1a",
+        "#C9A84C"
+      ],
+      "sizes": [
+        "50ml",
+        "100ml"
+      ],
+      "images": [
+        "/images/beaute/parfums/613f2f85-4d7a-4d11-8876-fbdf7b08ec13.jpg"
+      ],
+      "description": "Parfum musc premium avec notes orientales. Longue tenue et fragrance élégante.",
+      "featured": true,
+      "tags": [
+        "parfum",
+        "musc",
+        "oriental"
+      ]
+    },
+    {
+      "id": "b006",
+      "name": "Parfum Oud Royal",
+      "category": "beaute",
+      "subcategory": "parfums",
+      "price": 68500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.9,
+      "reviews": 312,
+      "stock": 25,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#8B4513",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "50ml",
+        "100ml"
+      ],
+      "images": [
+        "/images/beaute/parfums/8df334ac-42dd-4b05-8945-1139dfa2b798.jpg"
+      ],
+      "description": "Parfum oud royal avec notes boisées. Fragrance luxueuse et envoûtante.",
+      "featured": true,
+      "tags": [
+        "parfum",
+        "oud",
+        "royal"
+      ]
+    },
+    {
+      "id": "b007",
+      "name": "Parfum Rose Delicate",
+      "category": "beaute",
+      "subcategory": "parfums",
+      "price": 42500,
+      "originalPrice": 48500,
+      "discount": 12,
+      "rating": 4.7,
+      "reviews": 189,
+      "stock": 35,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#FFB6C1",
+        "#FFFFFF"
+      ],
+      "sizes": [
+        "50ml",
+        "100ml"
+      ],
+      "images": [
+        "/images/beaute/parfums/d7818099-89f3-411f-860b-f2744762731d.jpg"
+      ],
+      "description": "Parfum rose délicate avec notes florales. Douceur et féminité absolue.",
+      "featured": false,
+      "tags": [
+        "parfum",
+        "rose",
+        "floral"
+      ]
+    },
+    {
+      "id": "b008",
+      "name": "Parfum Jasmin Noble",
+      "category": "beaute",
+      "subcategory": "parfums",
+      "price": 52500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.8,
+      "reviews": 245,
+      "stock": 28,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#FFFFFF",
+        "#C9A84C"
+      ],
+      "sizes": [
+        "50ml",
+        "100ml"
+      ],
+      "images": [
+        "/images/beaute/parfums/f1d8f0bc-3395-4033-9355-1d0865b32cd3.jpg"
+      ],
+      "description": "Parfum jasmin noble avec notes intenses. Élégance et sophistication.",
+      "featured": false,
+      "tags": [
+        "parfum",
+        "jasmin",
+        "noble"
+      ]
+    },
+    {
+      "id": "b009",
+      "name": "Sac à Main Élégant",
+      "category": "beaute",
+      "subcategory": "sacs",
+      "price": 58500,
+      "originalPrice": 65500,
+      "discount": 11,
+      "rating": 4.8,
+      "reviews": 267,
+      "stock": 22,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#1a1a1a",
+        "#C9A84C",
+        "#8B4513"
+      ],
+      "sizes": [
+        "Standard"
+      ],
+      "images": [
+        "/images/beaute/sacs/3322b52d-7d82-4586-9a71-6fe2d0193f17.jpg",
+        "/images/beaute/sacs/4d51f31f-848d-4885-a9ce-016cd0ad8014.jpg"
+      ],
+      "description": "Sac à main élégant en cuir premium. Design raffiné et spacieux.",
+      "featured": true,
+      "tags": [
+        "sac",
+        "main",
+        "élégant"
+      ]
+    },
+    {
+      "id": "b010",
+      "name": "Sac à Bandoulière Chic",
+      "category": "beaute",
+      "subcategory": "sacs",
+      "price": 48500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.7,
+      "reviews": 198,
+      "stock": 25,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#1a1a1a",
+        "#C0C0C0"
+      ],
+      "sizes": [
+        "Standard"
+      ],
+      "images": [
+        "/images/beaute/sacs/57a350f8-fd87-4d60-82a3-5eb6b8c0242e.jpg"
+      ],
+      "description": "Sac à bandoulière chic avec design moderne. Pratique et stylé.",
+      "featured": false,
+      "tags": [
+        "sac",
+        "bandoulière",
+        "chic"
+      ]
+    },
+    {
+      "id": "b011",
+      "name": "Sac Pochette Luxe",
+      "category": "beaute",
+      "subcategory": "sacs",
+      "price": 38500,
+      "originalPrice": 43500,
+      "discount": 11,
+      "rating": 4.6,
+      "reviews": 156,
+      "stock": 30,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#C9A84C",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "Standard"
+      ],
+      "images": [
+        "/images/beaute/sacs/9ef1d769-89c2-4fa0-8e3c-62cbf4c88881.jpg"
+      ],
+      "description": "Sac pochette luxe avec finition premium. Idéal pour soirées.",
+      "featured": false,
+      "tags": [
+        "sac",
+        "pochette",
+        "luxe"
+      ]
+    },
+    {
+      "id": "b012",
+      "name": "Sac Tendance Mode",
+      "category": "beaute",
+      "subcategory": "sacs",
+      "price": 42500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.7,
+      "reviews": 178,
+      "stock": 27,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#8B4B62",
+        "#1a1a1a",
+        "#FFFFFF"
+      ],
+      "sizes": [
+        "Standard"
+      ],
+      "images": [
+        "/images/beaute/sacs/e708df5b-19ec-4557-80bc-a1b725fea0e2.jpg"
+      ],
+      "description": "Sac tendance mode avec design contemporain. Style et fonctionnalité.",
+      "featured": false,
+      "tags": [
+        "sac",
+        "tendance",
+        "mode"
+      ]
+    },
+    {
+      "id": "b013",
+      "name": "Crème Soin Visage Hydratante",
+      "category": "beaute",
+      "subcategory": "soin_visage",
+      "price": 32500,
+      "originalPrice": 37500,
+      "discount": 13,
+      "rating": 4.8,
+      "reviews": 234,
+      "stock": 35,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#FFFFFF",
+        "#F5F0E8"
+      ],
+      "sizes": [
+        "50ml",
+        "100ml"
+      ],
+      "images": [
+        "/images/beaute/soin_visage/13517a2b-f491-41cd-b847-6c5bb1d72bb5.jpg",
+        "/images/beaute/soin_visage/d82ce9dc-43ba-413c-a09d-ddfa521201f4.jpg"
+      ],
+      "description": "Crème soin visage hydratante avec ingrédients naturels. Hydratation intense et durable.",
+      "featured": true,
+      "tags": [
+        "crème",
+        "visage",
+        "hydratant"
+      ]
+    },
+    {
+      "id": "b014",
+      "name": "Sérum Anti-âge Premium",
+      "category": "beaute",
+      "subcategory": "soin_visage",
+      "price": 48500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.9,
+      "reviews": 312,
+      "stock": 25,
+      "isNew": true,
+      "isBestseller": true,
+      "colors": [
+        "#C9A84C",
+        "#1a1a1a"
+      ],
+      "sizes": [
+        "30ml",
+        "50ml"
+      ],
+      "images": [
+        "/images/beaute/soin_visage/b91969dd-4080-4f38-8aa8-c2ab4fe50cb1.jpg"
+      ],
+      "description": "Sérum anti-âge premium avec vitamines. Réduit rides et ridules efficacement.",
+      "featured": true,
+      "tags": [
+        "sérum",
+        "anti-âge",
+        "premium"
+      ]
+    },
+    {
+      "id": "b016",
+      "name": "Gommage Visage Doux",
+      "category": "beaute",
+      "subcategory": "soin_visage",
+      "price": 24500,
+      "originalPrice": null,
+      "discount": 0,
+      "rating": 4.6,
+      "reviews": 156,
+      "stock": 45,
+      "isNew": true,
+      "isBestseller": false,
+      "colors": [
+        "#F5F0E8",
+        "#FFFFFF"
+      ],
+      "sizes": [
+        "100ml"
+      ],
+      "images": [
+        "/images/beaute/soin_visage/ef324757-f990-4438-a0bf-f0bfd071e550.jpg"
+      ],
+      "description": "Gommage visage doux avec micro-grains. Exfoliation en douceur pour peau éclatante.",
+      "featured": false,
+      "tags": [
+        "gommage",
+        "visage",
+        "doux"
       ]
     }
   ],
@@ -1554,7 +3376,18 @@
     }
   ],
   "addresses": [],
-  "notifications": [],
+  "notifications": [
+    {
+      "id": "NOTIF-1785286962693",
+      "user_id": "USER-1785286962686",
+      "type": "welcome",
+      "title": "Bienvenue !",
+      "message": "Votre compte a été créé avec succès. Veuillez vérifier votre email pour activer votre compte.",
+      "link": null,
+      "read": false,
+      "created_at": "2026-07-29T01:02:42.693Z"
+    }
+  ],
   "payments": [
     {
       "id": "PAY-1785192934569",

@@ -23,6 +23,7 @@ const NAV_ITEMS = [
       { label: 'Robes', to: '/femmes/robes' },
       { label: 'Khimars', to: '/femmes/khimars' },
       { label: 'Accessoires', to: '/femmes/accessoires' },
+      { label: 'Chaussures', to: '/femmes/chaussures' },
     ],
   },
   {
@@ -30,11 +31,34 @@ const NAV_ITEMS = [
     sub: [
       { label: 'Qamis', to: '/hommes/qamis' },
       { label: 'Sarouels', to: '/hommes/sarouels' },
+      { label: 'Chaussures', to: '/hommes/chaussures' },
     ],
   },
-  { label: 'Beauté', to: '/beaute' },
-  { label: 'Électronique', to: '/electronique' },
-  { label: 'Accessoires', to: '/accessoires' },
+  {
+    label: 'Beauté', to: '/beaute',
+    sub: [
+      { label: 'Cheveux', to: '/beaute/cheveux' },
+      { label: 'Parfums', to: '/beaute/parfums' },
+      { label: 'Sacs', to: '/beaute/sacs' },
+      { label: 'Soin Visage', to: '/beaute/soin_visage' },
+    ],
+  },
+  {
+    label: 'Électronique', to: '/electronique',
+    sub: [
+      { label: 'Cuisine', to: '/electronique/cuisine' },
+      { label: 'Audio', to: '/electronique/audio' },
+      { label: 'Montres', to: '/electronique/montres' },
+    ],
+  },
+  {
+    label: 'Accessoires', to: '/accessoires',
+    sub: [
+      { label: 'Islam', to: '/accessoires/islam' },
+      { label: 'Chaussettes', to: '/accessoires/chaussettes' },
+      { label: 'Gants', to: '/accessoires/gants' },
+    ],
+  },
   { label: 'Promotions', to: '/promotions' },
   { label: 'Nouveautés', to: '/nouveautes' },
 ];
@@ -102,7 +126,6 @@ export default function Header() {
             <div className={s.topBarRight}>
               <Link to="/suivi-commande">Suivre ma commande</Link>
               <Link to="/faq">FAQ</Link>
-              {isAdmin && <Link to="/admin" style={{ color: 'var(--gold)' }}>Admin</Link>}
             </div>
           </div>
         </div>
@@ -258,7 +281,6 @@ export default function Header() {
                           <Link to="/compte" className={s.megaMenuLink} onClick={() => setUserMenuOpen(false)}>Mon Compte</Link>
                           <Link to="/compte/commandes" className={s.megaMenuLink} onClick={() => setUserMenuOpen(false)}>Mes Commandes</Link>
                           <Link to="/favoris" className={s.megaMenuLink} onClick={() => setUserMenuOpen(false)}>Mes Favoris</Link>
-                          {isAdmin && <Link to="/admin" className={s.megaMenuLink} style={{ color: 'var(--gold)' }} onClick={() => setUserMenuOpen(false)}>Administration</Link>}
                           <button
                             className={s.megaMenuLink}
                             style={{ width: '100%', textAlign: 'left', cursor: 'pointer', color: 'var(--error)', display: 'flex', alignItems: 'center', gap: 8 }}

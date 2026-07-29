@@ -1,20 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { Shield, Lock, CreditCard, ChevronLeft, ArrowRight, CheckCircle2, Phone } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCartStore } from '../store/cartStore';
+import { useAuthStore } from '../store/authStore';
 import toast from 'react-hot-toast';
 import styles from './Checkout.module.css';
 
 export default function CheckoutPage() {
   const { items, getTotal, getSubtotal, getShipping, discount, getDiscount, clearCart, couponCode } = useCartStore();
+  const { isAuthenticated, user } = useAuthStore();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('orange');
   const [orderData, setOrderData] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      toast.error('Vous devez être connecté pour passer une commande');
+      navigate('/login', { state: { from: location.pathname } });
+    }
+  }, [isAuthenticated, navigate, location]);
 
   const total = getTotal();
 
@@ -67,7 +77,7 @@ export default function CheckoutPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          user_id: null, // Pour l'instant sans authentification
+          user_id: user?.id || null,
           items: items,
           total: total,
           subtotal: getSubtotal(),

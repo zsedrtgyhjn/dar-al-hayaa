@@ -24,7 +24,7 @@ const PRICE_RANGES = [
   { label: 'Plus de 100€', min: 100, max: Infinity },
 ];
 
-export default function Shop({ categoryFilter = null, subcategoryFilter = null, title = 'Boutique' }) {
+export default function Shop({ categoryFilter = null, subcategoryFilter = null, title = 'Boutique', products = null, showPromoBanner = false, filterDiscount = false }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [sort, setSort] = useState('featured');
   const [priceRange, setPriceRange] = useState(0);
@@ -36,15 +36,28 @@ export default function Shop({ categoryFilter = null, subcategoryFilter = null, 
 
   const filtered = useMemo(() => {
     let result = [...PRODUCTS];
-
-    // Category filter
-    if (selectedCats.length > 0) {
-      result = result.filter((p) => selectedCats.includes(p.category));
+    
+    // Filter by discount if requested
+    if (filterDiscount) {
+      result = result.filter(p => p.discount && p.discount > 0);
+    }
+    
+    // Use custom products if provided
+    if (products) {
+      result = [...products];
     }
 
-    // Subcategory filter
-    if (selectedSubcats.length > 0) {
-      result = result.filter((p) => selectedSubcats.includes(p.subcategory));
+    // Only apply category/subcategory filters if not using custom products
+    if (!products && !filterDiscount) {
+      // Category filter
+      if (selectedCats.length > 0) {
+        result = result.filter((p) => selectedCats.includes(p.category));
+      }
+
+      // Subcategory filter
+      if (selectedSubcats.length > 0) {
+        result = result.filter((p) => selectedSubcats.includes(p.subcategory));
+      }
     }
 
     // Search filter
@@ -73,7 +86,7 @@ export default function Shop({ categoryFilter = null, subcategoryFilter = null, 
     }
 
     return result;
-  }, [selectedCats, selectedSubcats, sort, priceRange, search]);
+  }, [selectedCats, selectedSubcats, sort, priceRange, search, products, showPromoBanner, filterDiscount]);
 
   const toggleCat = (catId) => {
     setSelectedCats((prev) =>
@@ -120,6 +133,19 @@ export default function Shop({ categoryFilter = null, subcategoryFilter = null, 
           </div>
         </div>
       </div>
+
+      {/* Promotional Banner */}
+      {showPromoBanner && (
+        <div className={styles.promoBanner}>
+          <div className={styles.promoBannerImage}>
+            <img src="/images/promo-person.png" alt="Promotions" />
+            <div className={styles.promoBannerOverlay}>
+              <h2 className={styles.promoBannerTitle}>Promotions Beauté</h2>
+              <p className={styles.promoBannerDesc}>JUSQU'À -30% sur les produits sélectionnés</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="container section-sm">
         <div className={styles.layout}>

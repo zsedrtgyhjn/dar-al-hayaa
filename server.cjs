@@ -3,9 +3,13 @@ const cors = require('cors');
 const { Low } = require('lowdb');
 const { JSONFile } = require('lowdb/node');
 const path = require('path');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 const PORT = 3001;
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+const SALT_ROUNDS = 10;
 
 // Middleware
 app.use(cors());
@@ -57,11 +61,501 @@ app.use(async (req, res, next) => {
   next();
 });
 
+// Middleware d'authentification JWT
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ success: false, error: 'Token manquant' });
+  }
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ success: false, error: 'Token invalide' });
+    }
+    req.user = user;
+    next();
+  });
+};
+
+// Middleware de vérification des rôles
+const checkRole = (roles) => {
+  return (req, res, next) => {
+    if (!req.user) {
+      return res.status(401).json({ success: false, error: 'Non authentifié' });
+    }
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({ success: false, error: 'Permission refusée' });
+    }
+    next();
+  };
+};
+
 // API Routes
 
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', database: 'connected (lowdb)' });
+});
+
+// ── AUTHENTIFICATION ──
+
+// Inscription
+app.post('/api/auth/register', async (req, res) => {
+  try {
+    const { firstName, lastName, email, phone, password, confirmPassword } = req.body;
+
+    // Validation
+    if (!firstName || !lastName || !email || !phone || !password || !confirmPassword) {
+      return res.status(400).json({ success: false, error: 'Tous les champs sont requis' });
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({ success: false, error: 'Les mots de passe ne correspondent pas' });
+    }
+
+    if (password.length < 8) {
+      return res.status(400).json({ success: false, error: 'Le mot de passe doit contenir au moins 8 caractères' });
+    }
+
+    // Vérifier si l'email existe déjà
+    const existingUser = db.data.users.find(u => u.email === email.toLowerCase());
+    if (existingUser) {
+      return res.status(400).json({ success: false, error: 'Cette adresse email est déjà utilisée' });
+    }
+
+    // Hasher le mot de passe
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
+    // Créer l'utilisateur
+    const user = {
+      id: `USER-${Date.now()}`,
+      firstName,
+      lastName,
+      email: email.toLowerCase(),
+      phone,
+      password: hashedPassword,
+      role: 'client',
+      isActive: false,
+      emailVerified: false,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    db.data.users.push(user);
+    await db.write();
+
+    // Créer une notification de bienvenue
+    const notification = {
+      id: `NOTIF-${Date.now()}`,
+      user_id: user.id,
+      type: 'welcome',
+      title: 'Bienvenue !',
+      message: 'Votre compte a été créé avec succès. Veuillez vérifier votre email pour activer votre compte.',
+      link: null,
+      read: false,
+      created_at: new Date().toISOString()
+    };
+    db.data.notifications.push(notification);
+    await db.write();
+
+    res.status(201).json({ 
+      success: true, 
+      message: 'Compte créé avec succès. Veuillez vérifier votre email.',
+      user: {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role
+      }
+    });
+  } catch (error) {
+    console.error('Erreur inscription:', error);
+    res.status(500).json({ success: false, error: 'Erreur lors de la création du compte' });
+  }
+});
+
+// Connexion
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { email, password, rememberMe } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ success: false, error: 'Email et mot de passe requis' });
+    }
+
+    // Trouver l'utilisateur
+    const user = db.data.users.find(u => u.email === email.toLowerCase());
+    if (!user) {
+      return res.status(401).json({ success: false, error: 'Email ou mot de passe incorrect' });
+    }
+
+    // Vérifier si le compte est actif
+    if (!user.isActive) {
+      return res.status(403).json({ success: false, error: 'Compte non activé. Veuillez vérifier votre email.' });
+    }
+
+    // Vérifier le mot de passe
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+      return res.status(401).json({ success: false, error: 'Email ou mot de passe incorrect' });
+    }
+
+    // Créer le token JWT
+    const tokenExpiry = rememberMe ? '30d' : '24h';
+    const token = jwt.sign(
+      { 
+        id: user.id, 
+        email: user.email, 
+        role: user.role,
+        firstName: user.firstName,
+        lastName: user.lastName
+      },
+      JWT_SECRET,
+      { expiresIn: tokenExpiry }
+    );
+
+    // Mettre à jour la dernière connexion
+    user.lastLoginAt = new Date().toISOString();
+    user.updatedAt = new Date().toISOString();
+    await db.write();
+
+    res.json({
+      success: true,
+      token,
+      user: {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        isActive: user.isActive,
+        emailVerified: user.emailVerified
+      }
+    });
+  } catch (error) {
+    console.error('Erreur connexion:', error);
+    res.status(500).json({ success: false, error: 'Erreur lors de la connexion' });
+  }
+});
+
+// Déconnexion
+app.post('/api/auth/logout', authenticateToken, async (req, res) => {
+  try {
+    // En production, on pourrait ajouter le token à une blacklist
+    res.json({ success: true, message: 'Déconnexion réussie' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Erreur lors de la déconnexion' });
+  }
+});
+
+// Vérifier le token
+app.get('/api/auth/me', authenticateToken, (req, res) => {
+  const user = db.data.users.find(u => u.id === req.user.id);
+  if (!user) {
+    return res.status(404).json({ success: false, error: 'Utilisateur non trouvé' });
+  }
+
+  res.json({
+    success: true,
+    user: {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      phone: user.phone,
+      role: user.role,
+      isActive: user.isActive,
+      emailVerified: user.emailVerified
+    }
+  });
+});
+
+// Réinitialisation du mot de passe - Demande
+app.post('/api/auth/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ success: false, error: 'Email requis' });
+    }
+
+    const user = db.data.users.find(u => u.email === email.toLowerCase());
+    if (!user) {
+      // Pour des raisons de sécurité, on ne révèle pas si l'email existe
+      return res.json({ success: true, message: 'Si cet email existe, vous recevrez un lien de réinitialisation.' });
+    }
+
+    // Créer un token de réinitialisation (en production, envoyer par email)
+    const resetToken = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '1h' });
+    
+    user.resetToken = resetToken;
+    user.resetTokenExpiry = new Date(Date.now() + 3600000).toISOString();
+    await db.write();
+
+    // Créer une notification
+    const notification = {
+      id: `NOTIF-${Date.now()}`,
+      user_id: user.id,
+      type: 'password_reset',
+      title: 'Réinitialisation du mot de passe',
+      message: 'Une demande de réinitialisation de mot de passe a été effectuée.',
+      link: null,
+      read: false,
+      created_at: new Date().toISOString()
+    };
+    db.data.notifications.push(notification);
+    await db.write();
+
+    res.json({ success: true, message: 'Si cet email existe, vous recevrez un lien de réinitialisation.' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Erreur lors de la demande de réinitialisation' });
+  }
+});
+
+// Réinitialisation du mot de passe - Confirmation
+app.post('/api/auth/reset-password', async (req, res) => {
+  try {
+    const { token, password, confirmPassword } = req.body;
+
+    if (!token || !password || !confirmPassword) {
+      return res.status(400).json({ success: false, error: 'Tous les champs sont requis' });
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({ success: false, error: 'Les mots de passe ne correspondent pas' });
+    }
+
+    if (password.length < 8) {
+      return res.status(400).json({ success: false, error: 'Le mot de passe doit contenir au moins 8 caractères' });
+    }
+
+    // Vérifier le token
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const user = db.data.users.find(u => u.id === decoded.id);
+
+    if (!user || user.resetToken !== token || new Date(user.resetTokenExpiry) < new Date()) {
+      return res.status(400).json({ success: false, error: 'Token invalide ou expiré' });
+    }
+
+    // Mettre à jour le mot de passe
+    user.password = await bcrypt.hash(password, SALT_ROUNDS);
+    user.resetToken = null;
+    user.resetTokenExpiry = null;
+    user.updatedAt = new Date().toISOString();
+    await db.write();
+
+    res.json({ success: true, message: 'Mot de passe réinitialisé avec succès' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Erreur lors de la réinitialisation du mot de passe' });
+  }
+});
+
+// Changer le mot de passe (utilisateur connecté)
+app.post('/api/auth/change-password', authenticateToken, async (req, res) => {
+  try {
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      return res.status(400).json({ success: false, error: 'Tous les champs sont requis' });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ success: false, error: 'Les mots de passe ne correspondent pas' });
+    }
+
+    if (newPassword.length < 8) {
+      return res.status(400).json({ success: false, error: 'Le mot de passe doit contenir au moins 8 caractères' });
+    }
+
+    const user = db.data.users.find(u => u.id === req.user.id);
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'Utilisateur non trouvé' });
+    }
+
+    // Vérifier le mot de passe actuel
+    const validPassword = await bcrypt.compare(currentPassword, user.password);
+    if (!validPassword) {
+      return res.status(401).json({ success: false, error: 'Mot de passe actuel incorrect' });
+    }
+
+    // Mettre à jour le mot de passe
+    user.password = await bcrypt.hash(newPassword, SALT_ROUNDS);
+    user.updatedAt = new Date().toISOString();
+    await db.write();
+
+    res.json({ success: true, message: 'Mot de passe modifié avec succès' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Erreur lors de la modification du mot de passe' });
+  }
+});
+
+// ── UTILISATEURS (Gestion du profil) ──
+
+// Obtenir le profil utilisateur
+app.get('/api/users/:id', authenticateToken, (req, res) => {
+  const user = db.data.users.find(u => u.id === req.params.id);
+  if (!user) {
+    return res.status(404).json({ success: false, error: 'Utilisateur non trouvé' });
+  }
+
+  // L'utilisateur ne peut voir que son propre profil sauf admin
+  if (req.user.role !== 'admin' && req.user.role !== 'manager' && req.user.id !== req.params.id) {
+    return res.status(403).json({ success: false, error: 'Accès refusé' });
+  }
+
+  res.json({
+    success: true,
+    user: {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      phone: user.phone,
+      role: user.role,
+      isActive: user.isActive,
+      emailVerified: user.emailVerified,
+      createdAt: user.createdAt
+    }
+  });
+});
+
+// Mettre à jour le profil utilisateur
+app.put('/api/users/:id', authenticateToken, async (req, res) => {
+  try {
+    const { firstName, lastName, phone } = req.body;
+    const user = db.data.users.find(u => u.id === req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'Utilisateur non trouvé' });
+    }
+
+    // L'utilisateur ne peut modifier que son propre profil sauf admin
+    if (req.user.role !== 'admin' && req.user.role !== 'manager' && req.user.id !== req.params.id) {
+      return res.status(403).json({ success: false, error: 'Accès refusé' });
+    }
+
+    if (firstName) user.firstName = firstName;
+    if (lastName) user.lastName = lastName;
+    if (phone) user.phone = phone;
+    user.updatedAt = new Date().toISOString();
+
+    await db.write();
+
+    res.json({
+      success: true,
+      user: {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: user.phone,
+        role: user.role
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Erreur lors de la mise à jour du profil' });
+  }
+});
+
+// ── ADMIN - GESTION DES UTILISATEURS ──
+
+// Obtenir tous les utilisateurs (admin uniquement)
+app.get('/api/admin/users', authenticateToken, checkRole(['admin', 'manager']), (req, res) => {
+  const users = db.data.users.map(u => ({
+    id: u.id,
+    firstName: u.firstName,
+    lastName: u.lastName,
+    email: u.email,
+    phone: u.phone,
+    role: u.role,
+    isActive: u.isActive,
+    emailVerified: u.emailVerified,
+    createdAt: u.createdAt,
+    lastLoginAt: u.lastLoginAt
+  }));
+
+  res.json({ success: true, users });
+});
+
+// Modifier le rôle d'un utilisateur (admin uniquement)
+app.put('/api/admin/users/:id/role', authenticateToken, checkRole(['admin']), async (req, res) => {
+  try {
+    const { role } = req.body;
+    const user = db.data.users.find(u => u.id === req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'Utilisateur non trouvé' });
+    }
+
+    if (!['client', 'manager', 'admin'].includes(role)) {
+      return res.status(400).json({ success: false, error: 'Rôle invalide' });
+    }
+
+    // Empêcher de modifier son propre rôle
+    if (user.id === req.user.id) {
+      return res.status(400).json({ success: false, error: 'Vous ne pouvez pas modifier votre propre rôle' });
+    }
+
+    user.role = role;
+    user.updatedAt = new Date().toISOString();
+    await db.write();
+
+    res.json({ success: true, message: 'Rôle modifié avec succès' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Erreur lors de la modification du rôle' });
+  }
+});
+
+// Bloquer/Débloquer un utilisateur (admin uniquement)
+app.put('/api/admin/users/:id/status', authenticateToken, checkRole(['admin']), async (req, res) => {
+  try {
+    const { isActive } = req.body;
+    const user = db.data.users.find(u => u.id === req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'Utilisateur non trouvé' });
+    }
+
+    // Empêcher de se bloquer soi-même
+    if (user.id === req.user.id) {
+      return res.status(400).json({ success: false, error: 'Vous ne pouvez pas vous bloquer vous-même' });
+    }
+
+    user.isActive = isActive;
+    user.updatedAt = new Date().toISOString();
+    await db.write();
+
+    res.json({ success: true, message: isActive ? 'Utilisateur activé' : 'Utilisateur bloqué' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Erreur lors de la modification du statut' });
+  }
+});
+
+// Supprimer un utilisateur (admin uniquement)
+app.delete('/api/admin/users/:id', authenticateToken, checkRole(['admin']), async (req, res) => {
+  try {
+    const user = db.data.users.find(u => u.id === req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ success: false, error: 'Utilisateur non trouvé' });
+    }
+
+    // Empêcher de se supprimer soi-même
+    if (user.id === req.user.id) {
+      return res.status(400).json({ success: false, error: 'Vous ne pouvez pas vous supprimer vous-même' });
+    }
+
+    db.data.users = db.data.users.filter(u => u.id !== req.params.id);
+    await db.write();
+
+    res.json({ success: true, message: 'Utilisateur supprimé avec succès' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Erreur lors de la suppression de l\'utilisateur' });
+  }
 });
 
 // Categories
@@ -254,8 +748,28 @@ app.post('/api/coupons/validate', (req, res) => {
 });
 
 // Seed initial data
-app.post('/api/seed', (req, res) => {
+app.post('/api/seed', async (req, res) => {
   try {
+    // Seed admin user
+    const adminExists = db.data.users.find(u => u.email === 'admin@daralhayaa.com');
+    if (!adminExists) {
+      const adminPassword = await bcrypt.hash('admin123', SALT_ROUNDS);
+      const adminUser = {
+        id: 'ADMIN-001',
+        firstName: 'Admin',
+        lastName: 'Dar Al-Hayaa',
+        email: 'admin@daralhayaa.com',
+        phone: '+2250102030405',
+        password: adminPassword,
+        role: 'admin',
+        isActive: true,
+        emailVerified: true,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      db.data.users.push(adminUser);
+    }
+
     // Seed categories
     const categories = [
       {
@@ -326,7 +840,7 @@ app.post('/api/seed', (req, res) => {
 
     db.data.coupons = coupons;
 
-    db.write();
+    await db.write();
     res.json({ success: true, message: 'Database seeded successfully' });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
