@@ -46,6 +46,7 @@ import {
   IslamPage, ChaussettesPage, GantsPage
 } from './pages/CategoryPages';
 import { useAuthStore } from './store/authStore';
+import { useWishlistStore } from './store/wishlistStore';
 
 // ScrollToTop component
 const ScrollToTop = () => {
