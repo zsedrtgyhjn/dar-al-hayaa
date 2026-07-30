@@ -1,6 +1,7 @@
 // Store Panier — Zustand
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { couponsApi } from '../lib/api';
 
 export const useCartStore = create(
   persist(
@@ -53,36 +54,23 @@ export const useCartStore = create(
       // Vider le panier
       clearCart: () => set({ items: [], couponCode: '', discount: 0 }),
 
-      // Appliquer un coupon
+      // Appliquer un coupon (validé côté Supabase)
       applyCoupon: async (code) => {
-        try {
-          const response = await fetch('http://localhost:3001/api/coupons/validate', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ code })
-          });
-          
-          const data = await response.json();
-          
-          if (response.ok && data.success) {
-            set({ couponCode: code, discount: data.discount });
-            return { success: true, message: data.message };
-          } else {
-            return { success: false, message: data.message || 'Code promo invalide' };
-          }
-        } catch (error) {
-          // Fallback aux coupons locaux si l'API n'est pas disponible
-          const coupons = { NOUR10: 10, RAMADAN20: 20, BIENVENUE15: 15 };
-          const disc = coupons[code.toUpperCase()];
-          if (disc) {
-            set({ couponCode: code, discount: disc });
-            return { success: true, message: `Code promo appliqué : -${disc}%` };
-          }
-          return { success: false, message: 'Code promo invalide' };
+        if (!code || !code.trim()) {
+          return { success: false, message: 'Veuillez saisir un code promo' };
         }
+
+        const data = await couponsApi.validate(code.trim(), get().getSubtotal());
+
+        if (data?.success) {
+          set({ couponCode: code.trim().toUpperCase(), discount: data.discount });
+          return { success: true, message: data.message };
+        }
+        return { success: false, message: data?.message || 'Code promo invalide' };
       },
+
+      // Retirer le coupon
+      removeCoupon: () => set({ couponCode: '', discount: 0 }),
 
       // Totaux calculés
       getSubtotal: () => {

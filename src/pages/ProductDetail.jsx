@@ -6,9 +6,11 @@ import {
   Truck, RotateCcw, Shield, Minus, Plus, CheckCircle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { PRODUCTS } from '../data/products';
 import { useCartStore } from '../store/cartStore';
 import { useWishlistStore } from '../store/wishlistStore';
+import { useCatalogStore } from '../store/catalogStore';
+import { useAuthStore } from '../store/authStore';
+import { reviewsApi } from '../lib/api';
 import ProductCard from '../components/product/ProductCard';
 import toast from 'react-hot-toast';
 import styles from './ProductDetail.module.css';
@@ -16,9 +18,11 @@ import styles from './ProductDetail.module.css';
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const PRODUCTS = useCatalogStore((s) => s.products);
+  const user = useAuthStore((s) => s.user);
   const product = PRODUCTS.find((p) => p.id === id);
   const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedColor, setSelectedColor] = useState(product?.colors[0] || null);
+  const [selectedColor, setSelectedColor] = useState(product?.colors?.[0] || null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [qty, setQty] = useState(1);
   const [zoomed, setZoomed] = useState(false);
@@ -31,30 +35,25 @@ export default function ProductDetail() {
   const toggleItem = useWishlistStore((s) => s.toggleItem);
   const isInWishlist = useWishlistStore((s) => s.isInWishlist);
 
-  // Charger les avis depuis la base de données
+  // Charger les avis depuis Supabase
   useEffect(() => {
+    let cancelled = false;
+
     const loadReviews = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/reviews/product/${id}`);
-        const data = await response.json();
-        if (data.length > 0) {
-          setReviews(data);
-        } else {
-          // Fallback aux avis mock si aucun avis dans la BD
-          const { REVIEWS } = await import('../data/products.js');
-          setReviews(REVIEWS.filter(r => r.product === product?.name));
-        }
+        const data = await reviewsApi.listForProduct(id);
+        if (!cancelled) setReviews(data);
       } catch (error) {
-        // Fallback aux avis mock en cas d'erreur
-        const { REVIEWS } = await import('../data/products.js');
-        setReviews(REVIEWS.filter(r => r.product === product?.name));
+        console.error('[product] avis:', error.message);
+        if (!cancelled) setReviews([]);
       }
     };
 
-    if (product) {
-      loadReviews();
-    }
-  }, [id, product]);
+    if (id) loadReviews();
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
 
   if (!product) {
     return (
@@ -73,28 +72,26 @@ export default function ProductDetail() {
 
   const handleSubmitReview = async (e) => {
     e.preventDefault();
-    
-    try {
-      const response = await fetch('http://localhost:3001/api/reviews', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: 'guest', // À remplacer par l'ID utilisateur réel quand l'auth sera intégrée
-          product_id: id,
-          rating: newReview.rating,
-          comment: newReview.comment,
-          verified: false
-        })
-      });
 
-      const data = await response.json();
-      if (data.success) {
-        setReviews([...reviews, data.review]);
-        setNewReview({ rating: 5, comment: '' });
-        toast.success('Avis ajouté avec succès !');
-      }
-    } catch (error) {
-      toast.error('Erreur lors de l\'ajout de l\'avis');
+    if (!user?.id) {
+      toast.error('Connectez-vous pour laisser un avis');
+      navigate('/login', { state: { from: `/produit/${id}` } });
+      return;
+    }
+
+    const res = await reviewsApi.create({
+      userId: user.id,
+      productId: id,
+      rating: Number(newReview.rating),
+      comment: newReview.comment,
+    });
+
+    if (res.success) {
+      setReviews([res.review, ...reviews]);
+      setNewReview({ rating: 5, comment: '' });
+      toast.success('Avis ajouté avec succès');
+    } else {
+      toast.error(res.error);
     }
   };
 

@@ -44,7 +44,10 @@ import {
   CuisinePage, AudioPage, MontresPage,
   IslamPage, ChaussettesPage, GantsPage
 } from './pages/CategoryPages';
+import ResetPassword from './pages/auth/ResetPassword';
 import { useAuthStore } from './store/authStore';
+import { useCatalogStore } from './store/catalogStore';
+import { useWishlistStore } from './store/wishlistStore';
 
 // ScrollToTop component
 const ScrollToTop = () => {
@@ -52,6 +55,30 @@ const ScrollToTop = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+  return null;
+};
+
+// Initialise la session Supabase, le catalogue et les favoris au démarrage.
+const AppBootstrap = () => {
+  const checkAuth = useAuthStore((s) => s.checkAuth);
+  const initAuthListener = useAuthStore((s) => s.initAuthListener);
+  const user = useAuthStore((s) => s.user);
+  const loadCatalog = useCatalogStore((s) => s.load);
+  const loadFavorites = useWishlistStore((s) => s.loadFavorites);
+
+  useEffect(() => {
+    checkAuth();
+    loadCatalog();
+    const { data } = initAuthListener();
+    return () => data?.subscription?.unsubscribe();
+  }, [checkAuth, loadCatalog, initAuthListener]);
+
+  // Synchronise les favoris avec le compte connecté.
+  useEffect(() => {
+    if (user?.id) loadFavorites(user.id);
+    else useWishlistStore.setState({ userId: null });
+  }, [user?.id, loadFavorites]);
+
   return null;
 };
 
@@ -74,7 +101,11 @@ const ProtectedAdminRoute = ({ children }) => {
 const Layout = ({ children }) => {
   const { pathname } = useLocation();
   const isAdmin = pathname.startsWith('/admin') && pathname !== '/admin';
-  const isAuth = pathname === '/login' || pathname === '/register' || pathname === '/forgot-password';
+  const isAuth =
+    pathname === '/login' ||
+    pathname === '/register' ||
+    pathname === '/forgot-password' ||
+    pathname === '/reset-password';
   const isAdminLogin = pathname === '/admin';
   const isForbidden = pathname === '/forbidden';
 
@@ -100,6 +131,7 @@ export default function App() {
     <HelmetProvider>
       <Router>
         <ScrollToTop />
+        <AppBootstrap />
         <Toaster position="top-right" />
         <Layout>
           <Routes>
@@ -113,6 +145,7 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/compte" element={<Dashboard />} />
             <Route path="/favoris" element={<WishlistPage />} />
             

@@ -4,7 +4,17 @@ import { motion } from 'framer-motion';
 import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react';
 import { FAQ_ITEMS } from '../data/products';
 import { useState, useEffect } from 'react';
+import { ordersApi } from '../lib/api';
 import styles from './Pages.module.css';
+
+// Ordre canonique des étapes de suivi (identique à lib/api.js).
+const TRACKING_ORDER = [
+  'Commande validée',
+  'Paiement confirmé',
+  'En préparation',
+  'Expédiée',
+  'Livrée',
+];
 
 // ── Contact Page ──
 export function ContactPage() {
@@ -389,16 +399,31 @@ export function OrderTrackingPage() {
     setError(null);
     
     try {
-      const response = await fetch(`http://localhost:3001/api/orders/tracking/${trackingId}`);
-      const data = await response.json();
-      
-      if (response.ok) {
-        setResult(data);
-      } else {
-        setError(data.error || 'Commande non trouvée');
+      const ref = trackingId.trim();
+      // Accepte un numéro de suivi (TRK-…) ou un identifiant de commande (ORD-…)
+      const order = ref.toUpperCase().startsWith('ORD-')
+        ? await ordersApi.get(ref)
+        : await ordersApi.getByTracking(ref);
+
+      if (!order) {
+        setResult(null);
+        setError('Aucune commande trouvée avec cette référence');
+        return;
       }
+
+      const steps = (order.order_tracking ?? [])
+        .slice()
+        .sort((a, b) => TRACKING_ORDER.indexOf(a.step_label) - TRACKING_ORDER.indexOf(b.step_label))
+        .map((s) => ({
+          label: s.step_label,
+          done: s.is_done,
+          date: s.step_date ? new Date(s.step_date).toLocaleDateString('fr-FR') : '—',
+        }));
+
+      setResult({ ...order, steps });
     } catch (err) {
-      setError('Erreur de connexion au serveur');
+      console.error('[tracking]', err);
+      setError(err.message || 'Impossible de récupérer la commande');
     } finally {
       setLoading(false);
     }

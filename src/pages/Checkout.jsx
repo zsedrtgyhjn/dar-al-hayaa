@@ -5,6 +5,7 @@ import { Shield, Lock, CreditCard, ChevronLeft, ArrowRight, CheckCircle2, Phone 
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCartStore } from '../store/cartStore';
 import { useAuthStore } from '../store/authStore';
+import { ordersApi, paymentsApi } from '../lib/api';
 import toast from 'react-hot-toast';
 import styles from './Checkout.module.css';
 
@@ -48,77 +49,52 @@ export default function CheckoutPage() {
     setLoading(true);
     
     try {
-      // Simuler le paiement mobile
-      const paymentResponse = await fetch('http://localhost:3001/api/payments', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          order_id: 'pending',
-          method: paymentMethod,
-          amount: total,
-          status: 'completed',
-          transaction_id: `TXN-${Date.now()}`,
-          phone: orderData.phone
-        })
-      });
-
-      const paymentData = await paymentResponse.json();
-      
-      if (!paymentResponse.ok) {
-        throw new Error('Erreur lors du paiement');
+      if (!user?.id) {
+        throw new Error('Vous devez être connecté pour passer une commande');
       }
 
-      // Créer la commande via l'API
-      const response = await fetch('http://localhost:3001/api/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          user_id: user?.id || null,
-          items: items,
-          total: total,
-          subtotal: getSubtotal(),
-          shipping: getShipping(),
-          discount: discount,
-          coupon_code: couponCode || null,
-          payment_method: paymentMethod,
-          shipping_address: orderData,
-          phone: orderData.phone,
-          email: orderData.email
-        })
+      // 1. Créer la commande (avec ses lignes et son suivi) dans Supabase
+      const orderRes = await ordersApi.create({
+        userId: user.id,
+        items,
+        total,
+        subtotal: getSubtotal(),
+        shipping: getShipping(),
+        discount: getDiscount(),
+        couponCode: couponCode || null,
+        paymentMethod,
+        shippingAddress: orderData,
+        phone: orderData.phone,
+        email: orderData.email,
       });
 
-      const data = await response.json();
-      
-      if (response.ok) {
-        // Mettre à jour le paiement avec l'ID de commande
-        await fetch(`http://localhost:3001/api/payments/${paymentData.payment.id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ order_id: data.order_id })
-        });
+      if (!orderRes.success) throw new Error(orderRes.error);
 
-        setOrderData({ 
-          ...orderData, 
-          orderId: data.order_id, 
-          trackingNumber: data.tracking_number,
-          transactionId: paymentData.payment.transaction_id 
-        });
-        setLoading(false);
-        setSuccess(true);
-        clearCart();
-      } else {
-        throw new Error(data.error || 'Erreur lors de la commande');
-      }
+      // 2. Enregistrer le paiement rattaché à la commande
+      const transactionId = `TXN-${Date.now()}`;
+      const payRes = await paymentsApi.create({
+        orderId: orderRes.orderId,
+        method: paymentMethod,
+        amount: total,
+        status: 'completed',
+        transactionId,
+        phone: orderData.phone,
+      });
+      if (!payRes.success) console.error('[checkout] paiement:', payRes.error);
+
+      setOrderData({
+        ...orderData,
+        orderId: orderRes.orderId,
+        trackingNumber: orderRes.trackingNumber,
+        transactionId,
+      });
+      setLoading(false);
+      setSuccess(true);
+      clearCart();
     } catch (error) {
       setLoading(false);
-      console.error('Erreur:', error);
-      alert('Erreur lors de la commande: ' + error.message);
+      console.error('[checkout]', error);
+      toast.error('Erreur lors de la commande : ' + error.message);
     }
   };
 

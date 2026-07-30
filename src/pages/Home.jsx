@@ -4,7 +4,8 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Star, Truck, Shield, RefreshCw, Award, PhoneCall } from 'lucide-react';
 import HeroCarousel from '../components/home/HeroCarousel';
 import ProductCard from '../components/product/ProductCard';
-import { PRODUCTS, CATEGORIES, REVIEWS } from '../data/products';
+import { REVIEWS } from '../data/products';
+import { useCatalogStore } from '../store/catalogStore';
 import styles from './Home.module.css';
 
 // Section apparition au scroll
@@ -28,9 +29,13 @@ const FEATURES = [
 ];
 
 export default function Home() {
+  const PRODUCTS = useCatalogStore((s) => s.products);
+  const CATEGORIES = useCatalogStore((s) => s.categories);
+
   const featured = PRODUCTS.filter((p) => p.featured).slice(0, 8);
   const newArrivals = PRODUCTS.filter((p) => p.isNew).slice(0, 4);
   const bestsellers = PRODUCTS.filter((p) => p.isBestseller).slice(0, 4);
+  const promos = PRODUCTS.filter((p) => p.discount > 0).slice(0, 4);
 
   return (
     <>
@@ -136,7 +141,7 @@ export default function Home() {
             </div>
           </FadeInSection>
           <div className={styles.productsGrid}>
-            {PRODUCTS.filter(p => p.discount > 0).slice(0, 4).map((p, i) => (
+            {promos.map((p, i) => (
               <ProductCard key={p.id} product={p} index={i} />
             ))}
           </div>

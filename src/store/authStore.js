@@ -1,263 +1,180 @@
-// Store Auth — Zustand
+// Store Auth — Zustand + Supabase Auth
+// L'API publique du store est inchangée pour ne rien casser dans les pages.
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
-const API_URL = 'http://localhost:3001/api';
+import { authApi } from '../lib/api';
+import { supabase } from '../lib/supabase';
 
 export const useAuthStore = create(
   persist(
     (set, get) => ({
       user: null,
-      token: null,
       isAuthenticated: false,
       isLoading: false,
+      isInitialized: false,
       error: null,
 
+      // -------------------------------------------------------------
       // Connexion
-      login: async (email, password, rememberMe = false) => {
+      // -------------------------------------------------------------
+      login: async (email, password) => {
         set({ isLoading: true, error: null });
-        try {
-          const response = await fetch(`${API_URL}/auth/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password, rememberMe }),
-          });
+        const res = await authApi.login({ email, password });
 
-          const data = await response.json();
-
-          if (data.success) {
-            set({
-              user: data.user,
-              token: data.token,
-              isAuthenticated: true,
-              isLoading: false,
-              error: null,
-            });
-            return { success: true, user: data.user };
-          } else {
-            set({
-              isLoading: false,
-              error: data.error || 'Erreur lors de la connexion',
-            });
-            return { success: false, error: data.error };
-          }
-        } catch (error) {
+        if (res.success) {
           set({
+            user: res.user,
+            isAuthenticated: true,
             isLoading: false,
-            error: 'Erreur de connexion au serveur',
+            error: null,
           });
-          return { success: false, error: 'Erreur de connexion au serveur' };
+          return { success: true, user: res.user };
         }
+        set({ isLoading: false, error: res.error });
+        return { success: false, error: res.error };
       },
 
+      // -------------------------------------------------------------
       // Inscription
+      // -------------------------------------------------------------
       register: async (firstName, lastName, email, phone, password, confirmPassword) => {
-        set({ isLoading: true, error: null });
-        try {
-          const response = await fetch(`${API_URL}/auth/register`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ firstName, lastName, email, phone, password, confirmPassword }),
-          });
-
-          const data = await response.json();
-
-          if (data.success) {
-            set({
-              isLoading: false,
-              error: null,
-            });
-            return { success: true, message: data.message };
-          } else {
-            set({
-              isLoading: false,
-              error: data.error || 'Erreur lors de l\'inscription',
-            });
-            return { success: false, error: data.error };
-          }
-        } catch (error) {
-          set({
-            isLoading: false,
-            error: 'Erreur de connexion au serveur',
-          });
-          return { success: false, error: 'Erreur de connexion au serveur' };
+        if (confirmPassword !== undefined && password !== confirmPassword) {
+          const error = 'Les mots de passe ne correspondent pas';
+          set({ error, isLoading: false });
+          return { success: false, error };
         }
+
+        set({ isLoading: true, error: null });
+        const res = await authApi.register({ firstName, lastName, email, phone, password });
+
+        if (res.success) {
+          // Si la confirmation email est désactivée, la session est déjà ouverte.
+          if (!res.needsConfirmation) {
+            const session = await authApi.getSession();
+            if (session) {
+              const profile = await authApi.fetchProfile(session.user.id);
+              set({ user: profile, isAuthenticated: true });
+            }
+          }
+          set({ isLoading: false, error: null });
+          return { success: true, message: res.message, needsConfirmation: res.needsConfirmation };
+        }
+        set({ isLoading: false, error: res.error });
+        return { success: false, error: res.error };
       },
 
+      // -------------------------------------------------------------
       // Déconnexion
+      // -------------------------------------------------------------
       logout: async () => {
-        try {
-          const { token } = get();
-          if (token) {
-            await fetch(`${API_URL}/auth/logout`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-              },
-            });
-          }
-        } catch (error) {
-          console.error('Erreur logout:', error);
+        await authApi.logout();
+        set({ user: null, isAuthenticated: false, error: null });
+      },
+
+      // -------------------------------------------------------------
+      // Restaure la session au chargement de l'application
+      // -------------------------------------------------------------
+      checkAuth: async () => {
+        const session = await authApi.getSession();
+        if (!session) {
+          set({ user: null, isAuthenticated: false, isInitialized: true });
+          return false;
         }
-        set({
-          user: null,
-          token: null,
-          isAuthenticated: false,
-          error: null,
+
+        const profile = await authApi.fetchProfile(session.user.id);
+        if (!profile || profile.isActive === false) {
+          await authApi.logout();
+          set({ user: null, isAuthenticated: false, isInitialized: true });
+          return false;
+        }
+
+        set({ user: profile, isAuthenticated: true, isInitialized: true });
+        return true;
+      },
+
+      // Écoute les changements de session (autre onglet, expiration du token…).
+      initAuthListener: () => {
+        return supabase.auth.onAuthStateChange(async (event, session) => {
+          if (event === 'SIGNED_OUT' || !session) {
+            set({ user: null, isAuthenticated: false });
+            return;
+          }
+          if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
+            const profile = await authApi.fetchProfile(session.user.id);
+            if (profile) set({ user: profile, isAuthenticated: true });
+          }
         });
       },
 
-      // Vérifier le token
-      checkAuth: async () => {
-        const { token } = get();
-        if (!token) {
-          set({ isAuthenticated: false, user: null });
-          return false;
-        }
-
-        try {
-          const response = await fetch(`${API_URL}/auth/me`, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-            },
-          });
-
-          const data = await response.json();
-
-          if (data.success) {
-            set({ user: data.user, isAuthenticated: true });
-            return true;
-          } else {
-            set({ user: null, token: null, isAuthenticated: false });
-            return false;
-          }
-        } catch (error) {
-          set({ user: null, token: null, isAuthenticated: false });
-          return false;
-        }
-      },
-
-      // Mot de passe oublié
+      // -------------------------------------------------------------
+      // Mots de passe
+      // -------------------------------------------------------------
       forgotPassword: async (email) => {
         set({ isLoading: true, error: null });
-        try {
-          const response = await fetch(`${API_URL}/auth/forgot-password`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email }),
-          });
-
-          const data = await response.json();
-
-          set({ isLoading: false });
-          return { success: data.success, message: data.message };
-        } catch (error) {
-          set({ isLoading: false, error: 'Erreur de connexion au serveur' });
-          return { success: false, error: 'Erreur de connexion au serveur' };
-        }
+        const res = await authApi.forgotPassword(email);
+        set({ isLoading: false, error: res.success ? null : res.error });
+        return res;
       },
 
-      // Réinitialiser le mot de passe
-      resetPassword: async (token, password, confirmPassword) => {
+      resetPassword: async (_token, password, confirmPassword) => {
+        if (confirmPassword !== undefined && password !== confirmPassword) {
+          return { success: false, error: 'Les mots de passe ne correspondent pas' };
+        }
         set({ isLoading: true, error: null });
-        try {
-          const response = await fetch(`${API_URL}/auth/reset-password`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token, password, confirmPassword }),
-          });
-
-          const data = await response.json();
-
-          set({ isLoading: false });
-          return { success: data.success, message: data.message };
-        } catch (error) {
-          set({ isLoading: false, error: 'Erreur de connexion au serveur' });
-          return { success: false, error: 'Erreur de connexion au serveur' };
-        }
+        const res = await authApi.resetPassword(password);
+        set({ isLoading: false, error: res.success ? null : res.error });
+        return res;
       },
 
-      // Changer le mot de passe
       changePassword: async (currentPassword, newPassword, confirmPassword) => {
-        set({ isLoading: true, error: null });
-        try {
-          const { token } = get();
-          const response = await fetch(`${API_URL}/auth/change-password`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-            },
-            body: JSON.stringify({ currentPassword, newPassword, confirmPassword }),
-          });
-
-          const data = await response.json();
-
-          set({ isLoading: false });
-          return { success: data.success, message: data.message };
-        } catch (error) {
-          set({ isLoading: false, error: 'Erreur de connexion au serveur' });
-          return { success: false, error: 'Erreur de connexion au serveur' };
+        if (confirmPassword !== undefined && newPassword !== confirmPassword) {
+          return { success: false, error: 'Les mots de passe ne correspondent pas' };
         }
+        set({ isLoading: true, error: null });
+        const res = await authApi.changePassword(currentPassword, newPassword);
+        set({ isLoading: false, error: res.success ? null : res.error });
+        return res;
       },
 
-      // Mettre à jour le profil
+      // -------------------------------------------------------------
+      // Profil
+      // -------------------------------------------------------------
       updateProfile: async (firstName, lastName, phone) => {
+        const { user } = get();
+        if (!user) return { success: false, error: 'Vous devez être connecté' };
+
         set({ isLoading: true, error: null });
-        try {
-          const { token, user } = get();
-          const response = await fetch(`${API_URL}/users/${user.id}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-            },
-            body: JSON.stringify({ firstName, lastName, phone }),
-          });
+        const res = await authApi.updateProfile(user.id, { firstName, lastName, phone });
 
-          const data = await response.json();
-
-          if (data.success) {
-            set({
-              user: data.user,
-              isLoading: false,
-            });
-            return { success: true, user: data.user };
-          } else {
-            set({
-              isLoading: false,
-              error: data.error,
-            });
-            return { success: false, error: data.error };
-          }
-        } catch (error) {
-          set({
-            isLoading: false,
-            error: 'Erreur de connexion au serveur',
-          });
-          return { success: false, error: 'Erreur de connexion au serveur' };
+        if (res.success) {
+          set({ user: res.user, isLoading: false });
+          return { success: true, user: res.user };
         }
+        set({ isLoading: false, error: res.error });
+        return { success: false, error: res.error };
       },
 
+      // -------------------------------------------------------------
       // Helpers
+      // -------------------------------------------------------------
       isAdmin: () => {
         const { user } = get();
-        return user && (user.role === 'admin' || user.role === 'manager');
+        return !!user && (user.role === 'admin' || user.role === 'manager');
       },
 
       isClient: () => {
         const { user } = get();
-        return user && user.role === 'client';
+        return !!user && user.role === 'client';
       },
 
       clearError: () => set({ error: null }),
     }),
     {
       name: 'daralhayaa-auth',
+      // La session est gérée par Supabase : on ne persiste que l'affichage
+      // pour éviter un écran vide au rechargement.
       partialize: (state) => ({
         user: state.user,
-        token: state.token,
         isAuthenticated: state.isAuthenticated,
       }),
     }
