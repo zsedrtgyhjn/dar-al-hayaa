@@ -1,88 +1,63 @@
-// Store Favoris — Zustand
+// Store Favoris — Zustand + Supabase
+// Les favoris d'un visiteur non connecte restent en local (persist) et sont
+// synchronises vers Supabase des qu'il se connecte.
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { addFavorite, removeFavorite, getFavorites } from '../lib/api';
 
 export const useWishlistStore = create(
   persist(
     (set, get) => ({
       items: [],
-      userId: null, // Pour l'intégration avec l'authentification
+      userId: null,
+      isLoading: false,
 
       setUserId: (userId) => set({ userId }),
 
       // Ajouter / Retirer des favoris
       toggleItem: async (product) => {
-        const items = get().items;
+        const { items, userId } = get();
         const exists = items.find((i) => i.id === product.id);
-        const userId = get().userId;
 
         if (exists) {
-          // Retirer des favoris
           set({ items: items.filter((i) => i.id !== product.id) });
-          
-          // Si connecté, supprimer de la base de données
           if (userId) {
             try {
-              await fetch(`http://localhost:3001/api/favorites/${exists.favoriteId}`, {
-                method: 'DELETE'
-              });
+              await removeFavorite(userId, product.id);
             } catch (error) {
-              console.error('Erreur suppression favori:', error);
+              console.error('[v0] Erreur suppression favori:', error.message);
             }
           }
-          
-          return false; // retiré
-        } else {
-          // Ajouter aux favoris
-          set({ items: [...items, { ...product, favoriteId: null }] });
-          
-          // Si connecté, ajouter à la base de données
-          if (userId) {
-            try {
-              const response = await fetch('http://localhost:3001/api/favorites', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  user_id: userId,
-                  product_id: product.id
-                })
-              });
-              const data = await response.json();
-              if (data.success) {
-                // Mettre à jour l'ID du favori
-                set({ 
-                  items: get().items.map(i => 
-                    i.id === product.id ? { ...i, favoriteId: data.favorite.id } : i
-                  )
-                });
-              }
-            } catch (error) {
-              console.error('Erreur ajout favori:', error);
-            }
-          }
-          
-          return true; // ajouté
+          return false; // retire
         }
-      },
 
-      isInWishlist: (productId) => {
-        return get().items.some((i) => i.id === productId);
-      },
-
-      removeItem: async (productId) => {
-        const items = get().items;
-        const item = items.find((i) => i.id === productId);
-        
-        set({ items: items.filter((i) => i.id !== productId) });
-        
-        // Si connecté, supprimer de la base de données
-        if (item?.favoriteId) {
+        set({ items: [...items, { ...product, favoriteId: null }] });
+        if (userId) {
           try {
-            await fetch(`http://localhost:3001/api/favorites/${item.favoriteId}`, {
-              method: 'DELETE'
+            const favoriteId = await addFavorite(userId, product.id);
+            set({
+              items: get().items.map((i) =>
+                i.id === product.id ? { ...i, favoriteId } : i
+              ),
             });
           } catch (error) {
-            console.error('Erreur suppression favori:', error);
+            console.error('[v0] Erreur ajout favori:', error.message);
+          }
+        }
+        return true; // ajoute
+      },
+
+      isInWishlist: (productId) => get().items.some((i) => i.id === productId),
+
+      removeItem: async (productId) => {
+        const { items, userId } = get();
+        set({ items: items.filter((i) => i.id !== productId) });
+
+        if (userId) {
+          try {
+            await removeFavorite(userId, productId);
+          } catch (error) {
+            console.error('[v0] Erreur suppression favori:', error.message);
           }
         }
       },
@@ -91,30 +66,37 @@ export const useWishlistStore = create(
 
       getCount: () => get().items.length,
 
-      // Charger les favoris depuis la base de données
+      // Charge les favoris depuis Supabase et fusionne les favoris locaux
+      // ajoutes avant la connexion.
       loadFavorites: async (userId) => {
         if (!userId) return;
-        
+        set({ isLoading: true, userId });
+
         try {
-          const response = await fetch(`http://localhost:3001/api/favorites/${userId}`);
-          const favorites = await response.json();
-          
-          // Récupérer les détails des produits
-          const productIds = favorites.map(f => f.product_id);
-          const productsResponse = await fetch('http://localhost:3001/api/products');
-          const allProducts = await productsResponse.json();
-          
-          const wishlistProducts = allProducts.filter(p => productIds.includes(p.id)).map(p => ({
-            ...p,
-            favoriteId: favorites.find(f => f.product_id === p.id)?.id
-          }));
-          
-          set({ items: wishlistProducts, userId });
+          const remote = await getFavorites();
+          const remoteIds = new Set(remote.map((p) => p.id));
+
+          // Favoris ajoutes hors connexion -> on les pousse en base.
+          const pending = get().items.filter((i) => !remoteIds.has(i.id));
+          for (const item of pending) {
+            try {
+              await addFavorite(userId, item.id);
+            } catch (error) {
+              console.error('[v0] Erreur sync favori:', error.message);
+            }
+          }
+
+          const merged = pending.length ? await getFavorites() : remote;
+          set({ items: merged, isLoading: false });
         } catch (error) {
-          console.error('Erreur chargement favoris:', error);
+          console.error('[v0] Erreur chargement favoris:', error.message);
+          set({ isLoading: false });
         }
       },
     }),
-    { name: 'daralhayaa-wishlist' }
+    {
+      name: 'daralhayaa-wishlist',
+      partialize: (state) => ({ items: state.items }),
+    }
   )
 );
